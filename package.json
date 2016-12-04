@@ -1,0 +1,22 @@
+{
+  "name": "travel-in-sysu-ui",
+  "version": "0.0.1",
+  "description": "UI for DS Project travel-in-sysu",
+  "main": "./src/main.js",
+  "scripts": {
+    "start": "electron ."
+  },
+  "repository": "https://github.com/LLenX/travel-in-sysu",
+  "keywords": [
+    "graph",
+    "gjr"
+  ],
+  "author": "Mensu",
+  "license": "CC0-1.0",
+  "devDependencies": {
+    "bluebird": "^3.4.6",
+    "co": "^4.6.0",
+    "electron": "^1.4.1",
+    "jquery": "^3.1.1"
+  }
+}
