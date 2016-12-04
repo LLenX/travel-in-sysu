@@ -3,7 +3,6 @@ const isWin32 = ~process.platform.indexOf('win32');
 let path = require('path');
 path = (isWin32 ? path.win32 : path);
 const myChildProcess = require('../lib/myChildProcess.js');
-const FilesIO = require('../lib/FilesIO.js');
 const {
   cowrapAll
 } = require('../lib/utility.js');
@@ -31,7 +30,6 @@ ${stdout1}
 module of reverse
 =============== input ===============
 ${stdin}
-
 ======= standard answer output ======
 ${stdout2}`;
   return ret;

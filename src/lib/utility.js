@@ -1,10 +1,10 @@
-const Bluebird = require('bluebird');
+'use strict';
 const co = require('co');
-module.exports = { Bluebird, co, addAsyncOn, cowrapAll };
+module.exports = { co, addAsyncOn, cowrapAll };
 
 function asyncOn(eventName, gen) {
   let self = this;
-  promisifed = co.wrap(gen);
+  let promisifed = co.wrap(gen);
   self.on(eventName, function() {
     return promisifed.apply(self, arguments).catch((err) => console.error(err));
   });

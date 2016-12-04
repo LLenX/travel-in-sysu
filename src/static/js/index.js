@@ -1,10 +1,14 @@
 'use strict';
+const isDebugging = (process.env.NODE_ENV == 'development');
 const path = require('path');
 const url = require('url');
-
-const app = require('electron').app;
-const ipcRenderer = require('electron').ipcRenderer;
-const remote = require('electron').remote;
+const {
+  co
+} = require('../../lib/utility.js');
+const {
+  ipcRenderer,
+  remote
+} = require('electron');
 
 const {
   BrowserWindow
@@ -13,6 +17,7 @@ const {
 const {
   addAsyncOn
 } = require('../../lib/utility.js');  // the path is relative to index.html
+addAsyncOn(ipcRenderer);
 
 const bgUrl = url.format({
   pathname: path.join(__dirname, '../html/bg.html'),
@@ -21,11 +26,8 @@ const bgUrl = url.format({
 });
 
 let $ = null;
-
 let bgWindow = null;
-
-const debug = true;
-if (debug) {
+if (isDebugging) {
   bgWindow = new BrowserWindow({
     "show": true,
     "width": 600,
@@ -39,25 +41,36 @@ if (debug) {
     "height": 100
   });
 }
-bgWindow.on('closed', (e) => {
-  bgWindow = null;
-});
-
 bgWindow.loadURL(bgUrl);
 bgWindow.webContents.on('did-finish-load', function() {
-  init();
+  return init();
 });
 
 function init() {
   $ = require('jquery');
-  $('.hi').on('click', sayHi);
+  $('.hi').on('click', sayHiOnClick);
+  $(window).on('beforeunload', function() {
+    bgWindow.close();
+    bgWindow = null;
+  });
+}
+
+function sayHiOnClick() {
+  sayHi().catch((e) => {
+    if (isDebugging && -1 != e.message.indexOf('Object has been destroyed')) {
+      console.error('关掉bg窗口后，窗口实体已经被毁灭，就不要再点击这个按钮了啦。可以刷新');
+    }
+    console.error(e);
+  });
 }
 
 function sayHi() {
-  bgWindow.webContents.send('say-hi-to-front', BrowserWindow.getFocusedWindow().id, 'Front');
+  return (co.wrap(function *() {
+    bgWindow.webContents.send('say-hi-to-front', BrowserWindow.getFocusedWindow().id,
+                              'Front');
+  }))();
 }
 
-addAsyncOn(ipcRenderer);
 ipcRenderer.asyncOn('say-hi-from-back', function *(event, msg) {
   $('.output').text(msg);
 });

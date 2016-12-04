@@ -1,7 +1,9 @@
 'use strict';
-const app = require('electron').app;
-const ipcRenderer = require('electron').ipcRenderer;
-const remote = require('electron').remote;
+const {
+  app,
+  ipcRenderer,
+  remote
+} = require('electron');
 
 const {
   BrowserWindow

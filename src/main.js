@@ -1,10 +1,12 @@
 // Based on [electron-quick-start](https://github.com/electron/electron-quick-start)
-
+'use strict';
+const isDebugging = (process.env.NODE_ENV == 'development');
 const path = require('path');
 const url = require('url');
-const app = require('electron').app;
-const ipcMain = require('electron').ipcMain;
-const BrowserWindow = require('electron').BrowserWindow;
+const {
+  app,
+  BrowserWindow
+} = require('electron');
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
@@ -22,7 +24,10 @@ function createWindow() {
   // and load the index.html of the app.
   mainWindow.loadURL(mainUrl);
 
-  mainWindow.webContents.toggleDevTools();
+  if (isDebugging) {
+    mainWindow.webContents.toggleDevTools();
+  }
+
   mainWindow.on('closed', function () {
     mainWindow = null;
   });

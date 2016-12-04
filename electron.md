@@ -1,3 +1,23 @@
+# 起步
+
+在全局安装 electron
+
+```
+npm install -g electron
+```
+
+安装依赖
+
+```
+npm install
+```
+
+# 打包
+
+[教程](https://github.com/electron/electron/blob/master/docs/tutorial/application-distribution.md)
+
+下载包模板，然后把代码填进去
+
 # 创建窗口
 
 用BrowserWindow模块

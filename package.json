@@ -4,7 +4,8 @@
   "description": "UI for DS Project travel-in-sysu",
   "main": "./src/main.js",
   "scripts": {
-    "start": "electron ."
+    "start": "electron .",
+    "test": "export NODE_ENV=development && electron ."
   },
   "repository": "https://github.com/LLenX/travel-in-sysu",
   "keywords": [
@@ -13,10 +14,9 @@
   ],
   "author": "Mensu",
   "license": "CC0-1.0",
-  "devDependencies": {
-    "bluebird": "^3.4.6",
+  "productName": "Travel In SYSU",
+  "dependencies": {
     "co": "^4.6.0",
-    "electron": "^1.4.1",
     "jquery": "^3.1.1"
   }
 }
