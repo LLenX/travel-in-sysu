@@ -1,3 +1,4 @@
+'use strict';
 const path = require('path');
 const url = require('url');
 
@@ -11,7 +12,7 @@ const {
 
 const {
   addAsyncOn
-} = require('../js/utility.js');
+} = require('../../lib/utility.js');  // the path is relative to index.html
 
 const bgUrl = url.format({
   pathname: path.join(__dirname, '../html/bg.html'),
@@ -21,13 +22,28 @@ const bgUrl = url.format({
 
 let $ = null;
 
-let bgWindow = new BrowserWindow({
-  "show": false,
-  "width": 100,
-  "height": 100
+let bgWindow = null;
+
+const debug = true;
+if (debug) {
+  bgWindow = new BrowserWindow({
+    "show": true,
+    "width": 600,
+    "height": 600
+  });
+  bgWindow.webContents.openDevTools();
+} else {
+  bgWindow = new BrowserWindow({
+    "show": false,
+    "width": 100,
+    "height": 100
+  });
+}
+bgWindow.on('closed', (e) => {
+  bgWindow = null;
 });
+
 bgWindow.loadURL(bgUrl);
-bgWindow.webContents.openDevTools();
 bgWindow.webContents.on('did-finish-load', function() {
   init();
 });

@@ -1,3 +1,4 @@
+'use strict';
 const app = require('electron').app;
 const ipcRenderer = require('electron').ipcRenderer;
 const remote = require('electron').remote;
@@ -8,11 +9,11 @@ const {
 
 const {
   addAsyncOn
-} = require('./utility.js');
+} = require('../../lib/utility.js');
 
 const {
   task
-} = require('./controller.js');
+} = require('../../controllers/controller.js');
 
 
 addAsyncOn(ipcRenderer);
@@ -22,7 +23,7 @@ ipcRenderer.asyncOn('say-hi-to-front', function *(event, windowId, name) {
   try {
     content = yield task(name);
   } catch(e) {
-    content = toString(e);
+    content = `${e}`;
   }
   sender.webContents.send('say-hi-from-back', content);
 });

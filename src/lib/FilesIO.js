@@ -1,11 +1,12 @@
 'use strict';
+const isWin32 = ~process.platform.indexOf('win32');
 let path = require('path');
-path = (~process.platform.indexOf('win32') ? path.win32 : path);
-let fs = require('fs');
+path = (isWin32 ? path.win32 : path);
+const fs = require('fs');
 
-let FilesIO = {
+const FilesIO = {
   "read": function(filepath, encoding) {
-    let self = this;
+    const self = this;
     if (encoding === undefined) {
       encoding = 'utf-8';
     }
@@ -15,9 +16,7 @@ let FilesIO = {
             if (err) {
               return reject(err);
             } else {
-              if (encoding == 'utf-8'
-                  && typeof(rawData) == 'string'
-                  && ~process.platform.indexOf('win32')) {
+              if (encoding == 'utf-8' && typeof(rawData) == 'string' && isWin32) {
                 rawData = rawData.replace(/\r\n/g, '\n');
               }
               return resolve(rawData);
@@ -28,15 +27,13 @@ let FilesIO = {
   },
 
   "write": function(filepath, data, encoding) {
-    let self = this;
+    const self = this;
     if (encoding === undefined) {
       encoding = 'utf-8';
     }
     return self.mkdir(path.dirname(filepath)).then(() => {
       return new Promise((resolve, reject) => {
-        if (encoding == 'utf-8'
-            && typeof(rawData) == 'string'
-            && ~process.platform.indexOf('win32')) {
+        if (encoding == 'utf-8' && typeof(rawData) == 'string' && isWin32) {
           data = data.replace(/\n/g, '\r\n');
         }
         fs.writeFile(path.normalize(filepath), data, encoding, (err) => {
@@ -50,7 +47,7 @@ let FilesIO = {
   },
 
   "create": function(filepath, data, overwrite, encoding) {
-    let self = this;
+    const self = this;
     if (overwrite) {
       return self.write(filepath, data, encoding);
     }
@@ -64,7 +61,7 @@ let FilesIO = {
   },
 
   "stat": function(filepath) {
-    let self = this;
+    const self = this;
     return new Promise((resolve, reject) => {
       fs.stat(path.normalize(filepath), (err, stat) => {
           if (err) {
@@ -78,12 +75,14 @@ let FilesIO = {
   },
 
   "mkdir": function(dirpath) {
-    let self = this;
+    const self = this;
     return new Promise((resolve, reject) => {
       fs.mkdir(dirpath, (err) => {
           if (err) {
             if (err.code == 'ENOENT') {
-              return resolve(self.mkdir( path.dirname(dirpath + '1.js') ).then(() => self.mkdir(dirpath)));
+              return resolve(self.mkdir( path.dirname(dirpath + '1.js') )
+                                   .then(() => self.mkdir(dirpath))
+                            );
             } else if (err.code == 'EEXIST') {
               return resolve(dirpath);
             } else {
