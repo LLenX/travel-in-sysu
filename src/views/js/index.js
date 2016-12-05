@@ -56,8 +56,8 @@ function init() {
   });
 }
 
-function bgDestroyedErrorHandler(func) {
-  co(func).catch((e) => {
+function trigger(gen) {
+  return co(gen).catch((e) => {
     if (isDebugging && -1 != e.message.indexOf('Object has been destroyed')) {
       console.error('关掉bg窗口后，窗口实体已经被毁灭，就不要再点击这个按钮了啦。可以刷新');
     }
@@ -65,14 +65,16 @@ function bgDestroyedErrorHandler(func) {
   });
 }
 
-// click on hi
-function sayHiOnClick() {
-  bgDestroyedErrorHandler(sayHi);
+function sendToBg(eventName) {
+  bgWindow.webContents.send(eventName, BrowserWindow.getFocusedWindow().id,
+                            Array.prototype.slice.call(arguments, 1));
 }
 
-function *sayHi() {
-  bgWindow.webContents.send('say-hi-to-front', BrowserWindow.getFocusedWindow().id,
-                            'Front');
+// click on hi
+function sayHiOnClick() {
+  trigger(function *sayHi() {
+    sendToBg('say-hi-to-front', 'Front');
+  });
 }
 
 ipcRenderer.asyncOn('say-hi-from-back', function *(event, msg) {
@@ -82,11 +84,9 @@ ipcRenderer.asyncOn('say-hi-from-back', function *(event, msg) {
 
 // click on read a file
 function readOnClick() {
-  bgDestroyedErrorHandler(readfile);
-}
-
-function *readfile() {
-  bgWindow.webContents.send('select-file', BrowserWindow.getFocusedWindow().id);
+  trigger(function *readfile() {
+    sendToBg('select-file');
+  });
 }
 
 ipcRenderer.asyncOn('file-selected', function *(event, msg) {
