@@ -6,7 +6,8 @@ const {
 } = require('electron');
 
 const {
-  BrowserWindow
+  BrowserWindow,
+  dialog
 } = remote;
 
 const {
@@ -14,7 +15,8 @@ const {
 } = require('../../lib/utility.js');
 
 const {
-  task
+  task,
+  selectAndReadFile
 } = require('../../controllers/controller.js');
 
 
@@ -28,4 +30,15 @@ ipcRenderer.asyncOn('say-hi-to-front', function *(event, windowId, name) {
     content = `${e}`;
   }
   sender.webContents.send('say-hi-from-back', content);
+});
+
+ipcRenderer.asyncOn('select-file', function *(event, windowId, name) {
+  let sender = BrowserWindow.fromId(windowId);
+  let content = null;
+  try {
+    content = yield selectAndReadFile(sender);
+  } catch(e) {
+    content = `${e}`;
+  }
+  sender.webContents.send('file-selected', content);
 });

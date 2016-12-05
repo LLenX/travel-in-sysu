@@ -12,7 +12,7 @@ const {
 // be closed automatically when the JavaScript object is garbage collected.
 let mainWindow = null;
 const mainUrl = url.format({
-  pathname: path.join(__dirname, 'static/html/index.html'),
+  pathname: path.join(__dirname, 'views/html/index.html'),
   protocol: 'file:',
   slashes: true
 });

@@ -3,12 +3,22 @@ const isWin32 = ~process.platform.indexOf('win32');
 let path = require('path');
 path = (isWin32 ? path.win32 : path);
 const myChildProcess = require('../lib/myChildProcess.js');
+const FilesIO = require('../lib/FilesIO.js');
+const {
+  remote
+} = require('electron');
+
+const {
+  dialog
+} = remote;
+
 const {
   cowrapAll
 } = require('../lib/utility.js');
 
 module.exports = cowrapAll({
-  task
+  task,
+  selectAndReadFile
 });
 
 function *task(name) {
@@ -69,4 +79,34 @@ function getRandomInput() {
     let res = 0;
     return Math.floor(Math.random() * (to - from + 1)) + from;
   }
+}
+
+function *selectAndReadFile(sender) {
+  let content = null;
+  const filters = [{
+      "name": 'Custom File Type',
+      "extensions": ['as']
+    }, {
+      "name": 'All Files',
+      "extensions": ['*']
+    }];
+  const filepaths = yield showOpenFileDialog(sender, filters);
+  if (!filepaths) return content;
+  try {
+    content = yield FilesIO.read(filepaths[0]);
+  } catch(e) {
+    content = e;
+  }
+  return content;
+}
+
+function showOpenFileDialog(sender, filters) {
+  return new Promise((resolve) => {
+    remote.dialog.showOpenDialog(sender, {
+      "properties": ['openFile'],
+      filters
+    }, function (files) {
+      return resolve(files);
+    });
+  });
 }
