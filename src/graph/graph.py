@@ -8,7 +8,7 @@ class Graph:
         initialize the graph with several vertex
         :@param vertex_size: number of the initial vertex
         """
-        self._adj_lists = [[] for i in range(vertex_num)]
+        self._adj_lists = [{} for i in range(vertex_num)]
         self._edge_num = 0
 
     def VertexNum(self):
@@ -17,7 +17,7 @@ class Graph:
         """
         return len(self._adj_lists)
 
-    def EdgeSize(self):
+    def EdgeNum(self):
         """
         number of edges in the graph
         """
@@ -31,8 +31,8 @@ class Graph:
         if vertex1 >= self.VertexNum() or vertex2 >= self.VertexNum():
             return False
 
-        self._adj_lists[vertex1].append((vertex2, weight))
-        self._adj_lists[vertex2].append((vertex1, weight))
+        self._adj_lists[vertex1][vertex2] = weight
+        self._adj_lists[vertex2][vertex1] = weight
         self._edge_num += 1
         return True
 
@@ -55,4 +55,4 @@ class Graph:
         if vertex >= self.VertexNum():
             return None
 
-        return self._adj_lists[vertex].copy()
+        return list(self._adj_lists[vertex].items())
