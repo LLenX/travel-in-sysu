@@ -49,14 +49,15 @@ bgWindow.webContents.on('did-finish-load', function() {
 function init() {
   $ = require('jquery');
   $('.hi').on('click', sayHiOnClick);
+  $('.readfile-btn').on('click', readOnClick);
   $(window).on('beforeunload', function() {
     bgWindow.close();
     bgWindow = null;
   });
 }
 
-function sayHiOnClick() {
-  sayHi().catch((e) => {
+function trigger(gen) {
+  return co(gen).catch((e) => {
     if (isDebugging && -1 != e.message.indexOf('Object has been destroyed')) {
       console.error('关掉bg窗口后，窗口实体已经被毁灭，就不要再点击这个按钮了啦。可以刷新');
     }
@@ -64,13 +65,31 @@ function sayHiOnClick() {
   });
 }
 
-function sayHi() {
-  return (co.wrap(function *() {
-    bgWindow.webContents.send('say-hi-to-front', BrowserWindow.getFocusedWindow().id,
-                              'Front');
-  }))();
+function sendToBg(eventName) {
+  bgWindow.webContents.send(eventName, BrowserWindow.getFocusedWindow().id,
+                            Array.prototype.slice.call(arguments, 1));
+}
+
+// click on hi
+function sayHiOnClick() {
+  trigger(function *sayHi() {
+    sendToBg('say-hi-to-front', 'Front');
+  });
 }
 
 ipcRenderer.asyncOn('say-hi-from-back', function *(event, msg) {
   $('.output').text(msg);
+});
+
+
+// click on read a file
+function readOnClick() {
+  trigger(function *readfile() {
+    sendToBg('select-file');
+  });
+}
+
+ipcRenderer.asyncOn('file-selected', function *(event, msg) {
+  if (!msg) return;
+  $('.readfile-content').text(msg);
 });
