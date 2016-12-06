@@ -1,4 +1,4 @@
-from collection import deque
+from collections import deque
 
 
 def Spfa(graph, start):
@@ -32,12 +32,14 @@ def _GetSpfaResult(start, distance_to, vertex_to):
     result = []
     for vertex, dist in enumerate(distance_to):
         if dist == -1:
-            result.append((-1, []))
+            result.append((vertex, -1, []))
             continue
+        dest = vertex
         path = []
-        while vertex != distance_to[vertex_to]:
+        while vertex != vertex_to[vertex]:
             path.append(vertex)
             vertex = vertex_to[vertex]
         path.append(start)
-        result.append((dist, path.reverse()))
+        path.reverse()
+        result.append((dest, dist, path))
     return result

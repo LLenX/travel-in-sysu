@@ -1,5 +1,5 @@
 import sys
-sys.path.append('/home/xuemq12/my/code/github/LLenX/travel-in-sysu/src')
+sys.path.append('../../src')
 
 import unittest
 from graph.graph import Graph
