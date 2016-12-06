@@ -16,23 +16,25 @@ const {
 
 const {
   task,
+  dealWithInput,
   selectAndReadFile
 } = require('../../controllers/controller.js');
 
 
 addAsyncOn(ipcRenderer);
-ipcRenderer.asyncOn('say-hi-to-front', function *(event, windowId, name) {
+
+ipcRenderer.asyncOn('input-come', function *(event, windowId, input) {
   let sender = BrowserWindow.fromId(windowId);
   let content = null;
   try {
-    content = yield task(name);
+    content = yield dealWithInput(input);
   } catch(e) {
     content = `${e}`;
   }
-  sender.webContents.send('say-hi-from-back', content);
+  sender.webContents.send('output-generated', content);
 });
 
-ipcRenderer.asyncOn('select-file', function *(event, windowId, name) {
+ipcRenderer.asyncOn('select-file', function *(event, windowId) {
   let sender = BrowserWindow.fromId(windowId);
   let content = null;
   try {

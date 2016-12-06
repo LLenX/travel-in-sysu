@@ -48,7 +48,7 @@ bgWindow.webContents.on('did-finish-load', function() {
 
 function init() {
   $ = require('jquery');
-  $('.hi').on('click', sayHiOnClick);
+  $('.input-btn').on('click', inputOnClick);
   $('.readfile-btn').on('click', readOnClick);
   $(window).on('beforeunload', function() {
     bgWindow.close();
@@ -66,21 +66,28 @@ function trigger(gen) {
 }
 
 function sendToBg(eventName) {
-  bgWindow.webContents.send(eventName, BrowserWindow.getFocusedWindow().id,
-                            Array.prototype.slice.call(arguments, 1));
+  bgWindow.webContents.send
+    .apply(bgWindow.webContents, [ eventName,
+                                   BrowserWindow.getFocusedWindow().id ]
+                                    .concat(Array.prototype.slice.call(arguments, 1)));
 }
 
-// click on hi
-function sayHiOnClick() {
-  trigger(function *sayHi() {
-    sendToBg('say-hi-to-front', 'Front');
+
+// click on input
+
+function inputOnClick() {
+  let self = this;
+  trigger(function *sendInput() {
+    let input = $('.input-text').val();
+    $('.input-text').val('');
+    sendToBg('input-come', input);
   });
 }
 
-ipcRenderer.asyncOn('say-hi-from-back', function *(event, msg) {
-  $('.output').text(msg);
+ipcRenderer.asyncOn('output-generated', function *(event, msg) {
+  if (!msg) return;
+  $('.output-content').text($('.output-content').text() + msg);
 });
-
 
 // click on read a file
 function readOnClick() {

@@ -9,77 +9,13 @@ const {
 } = require('electron');
 
 const {
-  dialog
-} = remote;
-
-const {
   cowrapAll
 } = require('../lib/utility.js');
 
 module.exports = cowrapAll({
-  task,
+  dealWithInput,
   selectAndReadFile
 });
-
-function *task(name) {
-  let [error, stdout1, stderr1] = yield myChildProcess.exec(`echo 'Hi, ${name}'`);
-  if (error) {
-    // hai mei xiang hao
-  }
-
-  let stdin = getRandomInput();
-  let [code, stdout2, stderr2] =
-      yield myChildProcess.spawn(path.join(__dirname, './ans'), [], {stdin});
-  if (code !== 0) {
-    // hai mei xiang hao
-  }
-  let ret =
-`echo output:
-${stdout1}
-
-module of reverse
-=============== input ===============
-${stdin}
-======= standard answer output ======
-${stdout2}`;
-  return ret;
-}
-
-function getRandomInput() {
-  let stdin = ``;
-  let caseNum = getRandomInt(1, 10);
-  let length = 0, mod = 0, difficulty = 0, leadingZeroLength = 0;
-  stdin += `${caseNum}\n`
-  for (let caseIndex = 0; caseIndex != caseNum; ++caseIndex) {
-    mod = getRandomInt(1, 1000);
-    stdin += `${mod} `
-    difficulty = getRandomInt(0, 10);
-    switch (difficulty) {
-      case 10:
-        length = getRandomInt(1, 10000);
-        break;
-      default:
-        length = getRandomInt(1, 20);
-        break;
-    }
-    if (caseNum % 3 == 0 && difficulty == 5) {
-      leadingZeroLength = getRandomInt(0, 10);
-      while (leadingZeroLength--) {
-        stdin += `0`
-      }
-    }
-    while (length--) {
-      stdin += getRandomInt(0, 9);
-    }
-    stdin += `\n`;
-  }
-  return stdin;
-
-  function getRandomInt(from, to) {
-    let res = 0;
-    return Math.floor(Math.random() * (to - from + 1)) + from;
-  }
-}
 
 function *selectAndReadFile(sender) {
   let content = null;
@@ -94,7 +30,7 @@ function *selectAndReadFile(sender) {
   if (!filepaths) return content;
   try {
     content = yield FilesIO.read(filepaths[0]);
-  } catch(e) {
+  } catch (e) {
     content = e;
   }
   return content;
@@ -109,4 +45,22 @@ function showOpenFileDialog(sender, filters) {
       return resolve(files);
     });
   });
+}
+
+let child = null;
+function *dealWithInput(input) {
+  if (child && child.exitCode !== null) {
+    child = null;
+  }
+  if (!child) {
+    child = yield myChildProcess.ioSpawn(path.join(__dirname, './ans'));
+  }
+  let output = null;
+  try {
+    output = yield child.input(input);
+  } catch (e) {
+    child = null;
+    output = e.message;
+  }
+  return output;
 }

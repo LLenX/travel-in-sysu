@@ -1,6 +1,11 @@
 'use strict';
 const co = require('co');
-module.exports = { co, addAsyncOn, cowrapAll };
+module.exports = {
+  co,
+  addAsyncOn,
+  cowrapAll,
+  addPropertiesFrom
+};
 
 function asyncOn(eventName, gen) {
   let self = this;
@@ -22,4 +27,11 @@ function cowrapAll(obj) {
     }
   }
   return obj;
+}
+
+function addPropertiesFrom(dest, src, propArr) {
+  for (let prop of propArr) {
+    if (!src[prop]) continue;
+    dest[prop] = src[prop];
+  }
 }
