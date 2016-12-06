@@ -20,18 +20,21 @@ module.exports = cowrapAll({
 function *selectAndReadFile(sender) {
   let content = null;
   const filters = [{
-      "name": 'Custom File Type',
-      "extensions": ['as']
-    }, {
-      "name": 'All Files',
-      "extensions": ['*']
-    }];
+    "name": 'Map Data File (*.mapdat)',
+    "extensions": ['mapdat']
+  }];
   const filepaths = yield showOpenFileDialog(sender, filters);
-  if (!filepaths) return content;
+  if (!filepaths) return null;
   try {
     content = yield FilesIO.read(filepaths[0]);
   } catch (e) {
-    content = e;
+    return e;
+  }
+  try {
+    content = JSON.parse(content);
+    content['mapPath'] = filepaths[0];
+  } catch (e) {
+    content = new Error('文件内容损毁。');
   }
   return content;
 }
@@ -53,7 +56,7 @@ function *dealWithInput(input) {
     child = null;
   }
   if (!child) {
-    child = yield myChildProcess.ioSpawn(path.join(__dirname, './ans'));
+    child = yield myChildProcess.ioSpawn('python3', [ path.join(__dirname, './validate.py') ]);
   }
   let output = null;
   try {

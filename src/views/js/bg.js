@@ -28,7 +28,7 @@ ipcRenderer.asyncOn('input-come', function *(event, windowId, input) {
   let content = null;
   try {
     content = yield dealWithInput(input);
-  } catch(e) {
+  } catch (e) {
     content = `${e}`;
   }
   sender.webContents.send('output-generated', content);
@@ -39,8 +39,12 @@ ipcRenderer.asyncOn('select-file', function *(event, windowId) {
   let content = null;
   try {
     content = yield selectAndReadFile(sender);
-  } catch(e) {
+  } catch (e) {
     content = `${e}`;
+  }
+  if (content instanceof Error) {
+    dialog.showErrorBox('粗错啦', content.message);
+    content = null;
   }
   sender.webContents.send('file-selected', content);
 });

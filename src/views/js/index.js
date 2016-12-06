@@ -72,14 +72,13 @@ function sendToBg(eventName) {
                                     .concat(Array.prototype.slice.call(arguments, 1)));
 }
 
-
 // click on input
 
 function inputOnClick() {
   let self = this;
+  let input = $('.input-text').val();
+  $('.input-text').val('');
   trigger(function *sendInput() {
-    let input = $('.input-text').val();
-    $('.input-text').val('');
     sendToBg('input-come', input);
   });
 }
@@ -98,5 +97,5 @@ function readOnClick() {
 
 ipcRenderer.asyncOn('file-selected', function *(event, msg) {
   if (!msg) return;
-  $('.readfile-content').text(msg);
+  $('.readfile-content').text(JSON.stringify(msg));
 });
