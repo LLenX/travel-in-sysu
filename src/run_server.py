@@ -12,7 +12,5 @@ if __name__ == '__main__':
     if len(sys.argv) != 2:
         PrintToTerminal('usage:', sys.argv[0], '<path/to/json>', file=sys.stderr)
         sys.exit(1)
-    PrintToTerminal("initializing server")
     server = GraphServer(sys.argv[1])
-    PrintToTerminal("running server")
     server.Run()

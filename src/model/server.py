@@ -13,8 +13,9 @@ class GraphServer:
         initialize server by the path to the json containing a graph
         """
         with open(path_to_json) as json_file:
+            content = json_file.read()
             self._id_name_map, walk_graph, car_graph = \
-                    json2graph.Convert(json_file.read())
+                json2graph.Convert(content)
         self._calculator = Calculator(car_graph, walk_graph)
 
     def Run(self):
@@ -51,6 +52,6 @@ class GraphServer:
         index_path = result[2]
         output_json_obj['path'] = list(
                 map(self._id_name_map.__getitem__, index_path))
-        json.dump(output_json_obj, sys.stdout)
+        json.dump(output_json_obj, sys.stdout, ensure_ascii=False)
         sys.stdout.write('\n')
         sys.stdout.flush()
