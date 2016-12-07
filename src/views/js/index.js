@@ -25,7 +25,7 @@ const bgUrl = url.format({
   slashes: true
 });
 
-let $ = global.$;
+let $ = null;
 let bgWindow = null;
 if (isDebugging) {
   bgWindow = new BrowserWindow({
@@ -47,7 +47,7 @@ bgWindow.webContents.on('did-finish-load', function() {
 });
 
 function init() {
-  $ = global.$ = require(path.join(__dirname, './jquery.js'));
+  $ = window.$ = require(path.join(__dirname, './jquery.js'));
   $('.import-map-btn').on('click', importMapFile);
   $('.query-route-btn').on('click', inputOnClick);
   $('.exchange-btn').on('click', exchangeEnds);
