@@ -6,23 +6,7 @@
       "x": 100,
       "y": 100
     },
-    "description": "不如去南校",
-    "adjpoints": [{
-      "destId": 1,
-      "forCar": false,
-      "forWalk": true,
-      "distance": 6
-    }, {
-      "destId": 2,
-      "forCar": true,
-      "forWalk": false,
-      "distance": 7
-    }, {
-      "destId": 3,
-      "forCar": false,
-      "forWalk": true,
-      "distance": 6
-    }]
+    "description": "不如去南校"
   }, {
     "name": "行政楼",
     "id": 1,
@@ -30,18 +14,7 @@
       "x": 100,
       "y": 100
     },
-    "description": "难吃",
-    "adjpoints": [{
-      "destId": 0,
-      "forCar": false,
-      "forWalk": true,
-      "distance": 6
-    }, {
-      "destId": 4,
-      "forCar": false,
-      "forWalk": true,
-      "distance": 3
-    }]
+    "description": "难吃"
   }, {
     "name": "超算中心",
     "id": 2,
@@ -49,18 +22,7 @@
       "x": 100,
       "y": 100
     },
-    "description": "不让进",
-    "adjpoints": [{
-      "destId": 0,
-      "forCar": true,
-      "forWalk": false,
-      "distance": 7
-    }, {
-      "destId": 3,
-      "forCar": true,
-      "forWalk": false,
-      "distance": 5
-    }]
+    "description": "不让进"
   }, {
     "name": "公共教学楼",
     "id": 3,
@@ -68,23 +30,7 @@
       "x": 100,
       "y": 100
     },
-    "description": "万恶之源",
-    "adjpoints": [{
-      "destId": 0,
-      "forCar": false,
-      "forWalk": true,
-      "distance": 6
-    }, {
-      "destId": 2,
-      "forCar": true,
-      "forWalk": false,
-      "distance": 5
-    }, {
-      "destId": 4,
-      "forCar": false,
-      "forWalk": true,
-      "distance": 3
-    }]
+    "description": "万恶之源"
   }, {
     "name": "图书馆",
     "id": 4,
@@ -92,17 +38,43 @@
       "x": 100,
       "y": 100
     },
-    "description": "避暑山庄",
-    "adjpoints": [{
-      "destId": 1,
-      "forCar": false,
-      "forWalk": true,
-      "distance": 3
-    }, {
-      "destId": 3,
-      "forCar": false,
-      "forWalk": true,
-      "distance": 3
-    }]
+    "description": "避暑山庄"
+  }],
+  "routes": [{
+    "srcId": 0,
+    "destId": 1,
+    "forCar": false,
+    "forWalk": true,
+    "distance": 6
+  }, {
+    "srcId": 0,
+    "destId": 2,
+    "forCar": true,
+    "forWalk": false,
+    "distance": 7
+  }, {
+    "srcId": 0,
+    "destId": 3,
+    "forCar": false,
+    "forWalk": true,
+    "distance": 6
+  }, {
+    "srcId": 1,
+    "destId": 4,
+    "forCar": false,
+    "forWalk": true,
+    "distance": 3
+  }, {
+    "srcId": 2,
+    "destId": 3,
+    "forCar": true,
+    "forWalk": false,
+    "distance": 5
+  }, {
+    "srcId": 3,
+    "destId": 4,
+    "forCar": false,
+    "forWalk": true,
+    "distance": 3
   }]
 }

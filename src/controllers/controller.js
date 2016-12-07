@@ -13,7 +13,8 @@ const {
 } = require('../lib/utility.js');
 
 module.exports = cowrapAll({
-  dealWithInput,
+  startGraphServer,
+  sendRequest,
   selectAndReadFile
 });
 
@@ -33,9 +34,10 @@ function *selectAndReadFile(sender) {
   }
   try {
     content = JSON.parse(content);
-    content['mapPath'] = filepaths[0];
+    mapdatValidate(content);
+    content['mapdatPath'] = filepaths[0];
   } catch (e) {
-    content = new Error('文件内容不完整');
+    content = new Error('文件已损坏');
   }
   return content;
 }
@@ -52,29 +54,40 @@ function showOpenFileDialog(sender, filters) {
 }
 
 let child = null;
-function *dealWithInput(input) {
-  let output = null;
-  // child exited but still is referenced
-  if (child && ((child.exitCode !== null) || input === undefined)) {
-    output = child.stdoutData;
+
+function *startGraphServer(mapdatPath) {
+  if (child !== null) {
+    child.kill('SIGKILL');
     child = null;
+  }
+  const serverPyPath = path.join(__dirname, '../run_server.py');
+  child = yield myChildProcess.ioSpawn('python3', [ serverPyPath, `${mapdatPath}` ]);
+}
+
+function *sendRequest(request) {
+  let output = null;
+  if (child === null) {
+    let error = new Error('要先导入地图');
+    console.error(error);
+    throw error;
+  } else if (child.exitCode !== null) {
+    output = child.stdoutData;
+    child.stdoutData = '';
     if (output.length) {
       return output;
     }
   }
-  if (!child) {
-    if (input) {
-      child = yield myChildProcess.ioSpawn('python3', [ path.join(__dirname, './validate.py') ]);
-    } else {
-      return null;
-    }
-  }
   try {
-    output = yield child.input(input);
+    output = yield child.input(request);
   } catch (e) {
     console.error(e);
+    child.kill('SIGKILL');
     child = null;
-    output = e.message;
+    output = e;
   }
   return output;
+}
+
+function mapdatValidate(content) {
+  return content;
 }

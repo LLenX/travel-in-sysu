@@ -57,7 +57,7 @@ class ioChildProcess {
   }
   memberInit() {
     let self = this;
-    addPropertiesFrom(self, self.child, ['stdin', 'stdout', 'stderr']);
+    addPropertiesFrom(self, self.child, ['stdin', 'stdout', 'stderr', 'kill']);
     self['inputData'] = self['stdoutData'] = self['stderrData'] = '';
     self['onOutputData'] = self['exitCode'] = null;
   }

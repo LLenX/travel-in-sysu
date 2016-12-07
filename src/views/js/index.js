@@ -25,7 +25,7 @@ const bgUrl = url.format({
   slashes: true
 });
 
-let $ = null;
+let $ = global.$;
 let bgWindow = null;
 if (isDebugging) {
   bgWindow = new BrowserWindow({
@@ -47,7 +47,7 @@ bgWindow.webContents.on('did-finish-load', function() {
 });
 
 function init() {
-  $ = require('jquery');
+  $ = global.$ = require(path.join(__dirname, './jquery.js'));
   $('.import-map-btn').on('click', importMapFile);
   $('.query-route-btn').on('click', inputOnClick);
   $('.exchange-btn').on('click', exchangeEnds);
@@ -76,14 +76,18 @@ function sendToBg(eventName) {
 // click on input
 function inputOnClick() {
   let self = this;
-  let input = $('.input-text').val();
-  $('.input-text').val('');
+  // let input = $('.input-text').val();
+  // $('.input-text').val('');
+  let mapData = $('.main').data('mapData');
+  let fromName = mapData.idOf[$('.route-from .end').text()],
+      toName = mapData.idOf[$('.route-to .end').text()];
+  let input = `0 ${fromName} ${toName}\n`;
   trigger(function *sendInput() {
-    sendToBg('input-come', input);
+    sendToBg('graph-request', input);
   });
 }
 
-ipcRenderer.asyncOn('output-generated', function *(event, msg) {
+ipcRenderer.asyncOn('graph-response', function *(event, msg) {
   if (!msg) return;
   $('.output-content').text($('.output-content').text() + msg);
 });
@@ -106,8 +110,14 @@ ipcRenderer.asyncOn('map-file-imported', function *(event, msg) {
   $('.description-wrapper .description').text(msg.spots[selected].description);
   $('.route-from .end').text(msg.spots[rand()].name);
   $('.route-to .end').text(msg.spots[rand()].name);
+  $('.main').data('mapData', msg);
+  msg['idOf'] = {};
+  msg['nameOf'] = {};
+  for (let oneSpot of msg.spots) {
+    msg['idOf'][oneSpot.name] = oneSpot.id;
+    msg['nameOf'][oneSpot.id] = oneSpot.name;
+  }
 });
-
 
 // click on exchange
 function exchangeEnds() {
