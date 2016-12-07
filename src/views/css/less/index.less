@@ -1,0 +1,47 @@
+@body-min-height: 768px;
+@body-min-width: 1024px;
+body {
+  min-height: @body-min-height * 0.95;
+  min-width: @body-min-width * 0.95;
+  margin: 0;
+  padding: 0;
+  user-select: none;
+}
+
+.header {
+  margin-top: 0;
+  font-size: 40px;
+  text-align: center;
+}
+
+.main {
+  height: @body-min-height * 0.8;
+  width: 100%;
+  font-size: 0;
+  & > * {
+    font-size: 14px;
+  }
+  .container {
+    height: 100%;
+    display: inline-block;
+    vertical-align: top;
+    
+    border-radius: 5px;
+    border: 1px solid gray;
+    box-sizing: border-box;
+  }
+  .map-container {
+    width: 65%;
+    margin-left: 1.5%;
+    margin-right: 2%;
+  }
+  .panel-container {
+    width: 30%;
+    padding: 10px;
+    .readfile-content {
+      user-select: text;
+      white-space: pre-wrap;
+      word-break: break-all;
+    }
+  }
+}

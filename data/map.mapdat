@@ -1,5 +1,4 @@
 {
-  "imgPath": "./map.png",
   "spots": [{
     "name": "牌坊",
     "id": 0,

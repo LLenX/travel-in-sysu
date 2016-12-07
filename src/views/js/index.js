@@ -16,7 +16,7 @@ const {
 
 const {
   addAsyncOn
-} = require('../../lib/utility.js');  // the path is relative to index.html
+} = require('../../lib/utility.js');
 addAsyncOn(ipcRenderer);
 
 const bgUrl = url.format({
