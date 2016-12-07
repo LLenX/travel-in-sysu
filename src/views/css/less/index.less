@@ -1,15 +1,21 @@
 @body-min-height: 768px;
 @body-min-width: 1024px;
+@body-font-size: 14px;
 body {
-  min-height: @body-min-height * 0.95;
-  min-width: @body-min-width * 0.95;
+  height: 100%;
+  width: 100%;
+  min-height: @body-min-height * 0.9;
+  min-width: @body-min-width * 0.7;
   margin: 0;
   padding: 0;
   user-select: none;
+  font-size: @body-font-size; 
+  font-family: Arial, sans-serif;
+  background-color: #F5F5F5;
 }
 
 .header {
-  margin-top: 0;
+  margin-top: 3%;
   font-size: 40px;
   text-align: center;
 }
@@ -19,15 +25,17 @@ body {
   width: 100%;
   font-size: 0;
   & > * {
-    font-size: 14px;
+    font-size: @body-font-size;
   }
   .container {
     height: 100%;
     display: inline-block;
     vertical-align: top;
     
-    border-radius: 5px;
-    border: 1px solid gray;
+    border: 1px solid #eee;
+    border-radius: 8px;
+    box-shadow: 0 3px 10px 0 rgba(0, 0, 0, .1);
+      background-color: #fff;
     box-sizing: border-box;
   }
   .map-container {
