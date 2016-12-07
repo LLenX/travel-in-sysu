@@ -47,10 +47,13 @@ class GraphServer:
         :@param result: the three-tuple result from calculator
                         ((start, end), distance, path)
         """
-        output_json_obj = {}
-        output_json_obj['distance'] = result[1]
-        index_path = result[2]
-        output_json_obj['path'] = list(
+        if result is None:
+            output_json_obj = None
+        else:
+            output_json_obj = {}
+            output_json_obj['distance'] = result[1]
+            index_path = result[2]
+            output_json_obj['path'] = list(
                 map(self._id_name_map.__getitem__, index_path))
         json.dump(output_json_obj, sys.stdout, ensure_ascii=False)
         sys.stdout.write('\n')
