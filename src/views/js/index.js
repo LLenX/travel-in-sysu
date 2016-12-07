@@ -115,4 +115,3 @@ function exchangeEnds() {
   $('.route-from .end').text($('.route-to .end').text());
   $('.route-to .end').text(tmp);
 }
-
