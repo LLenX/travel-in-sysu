@@ -14,8 +14,11 @@ class Calculator:
         """
         calculate the shortest path between two vertex
         :@param: for_car whether find a path that's for car
-        :@return: a three-tuple, ((start, destination), length, path)
+        :@return: a two-tuple, (length, path)
         """
+        if not self._IsValid(start, end, for_car):
+            return None
+
         while True:
             # try to get result from cache first
             result = self._GetResultFromCache(start, end, for_car)
@@ -23,23 +26,29 @@ class Calculator:
                 break
             # calculate
             result_list = Spfa(self._graph_map[for_car], start)
-            if result_list is None:
-                return None
             # cache
             self._CacheResult(result_list, for_car)
 
         return result
 
+    def _IsValid(self, start, end, for_car):
+        return self._graph_map[for_car].VertexNum() > start \
+                and self._graph_map[for_car].VertexNum() > end
+
     def _GetResultFromCache(self, start, end, for_car):
         result = self._cache_map[for_car].get((start, end))
         if not result:
             result = self._cache_map[for_car].get((end, start))
+            if result:
+                result = (result[0], result[1].copy())
+                result[1].reverse()
         return result
 
     def _CacheResult(self, result_list, for_car):
-        for result in result_list:
-            start, end = result[0]
+        for raw_result in result_list:
+            start, end = raw_result[0]
             if (start, end) in self._cache_map[for_car] or (
                     end, start) in self._cache_map[for_car]:
                 continue
-            self._cache_map[for_car][(start, end)] = result
+            self._cache_map[for_car][(start, end)] = (
+                    raw_result[1], raw_result[2])
