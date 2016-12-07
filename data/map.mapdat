@@ -39,42 +39,292 @@
       "y": 100
     },
     "description": "避暑山庄"
+  }, {
+    "name": "田径场",
+    "id": 5,
+    "position": {
+      "x": 100,
+      "y": 100
+    },
+    "description": "足球课一点都不水"
+  }, {
+    "name": "体育馆",
+    "id": 6,
+    "position": {
+      "x": 100,
+      "y": 100
+    },
+    "description": "礼堂"
+  }, {
+    "name": "传设小礼堂",
+    "id": 7,
+    "position": {
+      "x": 100,
+      "y": 100
+    },
+    "description": "看电影"
+  }, {
+    "name": "篮球场",
+    "id": 8,
+    "position": {
+      "x": 100,
+      "y": 100
+    },
+    "description": "每次路过都怕篮球飞出来砸到自己"
+  }, {
+    "name": "南实验楼",
+    "id": 9,
+    "position": {
+      "x": 100,
+      "y": 100
+    },
+    "description": "通往北实验楼"
+  }, {
+    "name": "北实验楼",
+    "id": 10,
+    "position": {
+      "x": 100,
+      "y": 100
+    },
+    "description": "模电噩梦"
+  }, {
+    "name": "工学院广场",
+    "id": 11,
+    "position": {
+      "x": 100,
+      "y": 100
+    },
+    "description": "下雨就gg"
+  }, {
+    "name": "格致园",
+    "id": 12,
+    "position": {
+      "x": 100,
+      "y": 100
+    },
+    "description": "宾馆级宿舍"
+  }, {
+    "name": "明德园",
+    "id": 13,
+    "position": {
+      "x": 100,
+      "y": 100
+    },
+    "description": "拿快递，食堂近"
+  }, {
+    "name": "活动中心",
+    "id": 14,
+    "position": {
+      "x": 100,
+      "y": 100
+    },
+    "description": "四饭难吃"
+  }, {
+    "name": "慎思园",
+    "id": 15,
+    "position": {
+      "x": 100,
+      "y": 100
+    },
+    "description": "好"
+  }, {
+    "name": "食堂",
+    "id": 16,
+    "position": {
+      "x": 100,
+      "y": 100
+    },
+    "description": "很久没去了"
+  }, {
+    "name": "中心花坛",
+    "id": 17,
+    "position": {
+      "x": 100,
+      "y": 100
+    },
+    "description": "挡路"
+  }, {
+    "name": "至善园",
+    "id": 18,
+    "position": {
+      "x": 100,
+      "y": 100
+    },
+    "description": "导入该数据时老司机终于成功安装electron"
   }],
   "routes": [{
     "srcId": 0,
     "destId": 1,
-    "forCar": false,
+    "forCar": true,
     "forWalk": true,
     "distance": 6
   }, {
     "srcId": 0,
     "destId": 2,
-    "forCar": true,
-    "forWalk": false,
+    "forCar": false,
+    "forWalk": true,
     "distance": 7
   }, {
     "srcId": 0,
     "destId": 3,
-    "forCar": false,
+    "forCar": true,
     "forWalk": true,
     "distance": 6
   }, {
     "srcId": 1,
     "destId": 4,
-    "forCar": false,
+    "forCar": true,
     "forWalk": true,
     "distance": 3
   }, {
     "srcId": 2,
     "destId": 3,
     "forCar": true,
-    "forWalk": false,
+    "forWalk": true,
     "distance": 5
   }, {
     "srcId": 3,
     "destId": 4,
+    "forCar": true,
+    "forWalk": true,
+    "distance": 3
+  }, {
+    "srcId": 3,
+    "destId": 5,
+    "forCar": true,
+    "forWalk": true,
+    "distance": 7
+  }, {
+    "srcId": 4,
+    "destId": 6,
+    "forCar": false,
+    "forWalk": true,
+    "distance": 2
+  }, {
+    "srcId": 4,
+    "destId": 7,
+    "forCar": false,
+    "forWalk": true,
+    "distance": 5
+  }, {
+    "srcId": 5,
+    "destId": 6,
+    "forCar": true,
+    "forWalk": true,
+    "distance": 3
+  }, {
+    "srcId": 6,
+    "destId": 8,
+    "forCar": false,
+    "forWalk": true,
+    "distance": 6
+  }, {
+    "srcId": 6,
+    "destId": 13,
+    "forCar": true,
+    "forWalk": true,
+    "distance": 7
+  }, {
+    "srcId": 6,
+    "destId": 16,
+    "forCar": true,
+    "forWalk": true,
+    "distance": 3
+  }, {
+    "srcId": 7,
+    "destId": 8,
+    "forCar": false,
+    "forWalk": true,
+    "distance": 2
+  }, {
+    "srcId": 7,
+    "destId": 9,
+    "forCar": true,
+    "forWalk": true,
+    "distance": 1
+  }, {
+    "srcId": 9,
+    "destId": 10,
+    "forCar": true,
+    "forWalk": true,
+    "distance": 2
+  }, {
+    "srcId": 9,
+    "destId": 11,
+    "forCar": true,
+    "forWalk": true,
+    "distance": 5
+  }, {
+    "srcId": 9,
+    "destId": 12,
+    "forCar": true,
+    "forWalk": true,
+    "distance": 15
+  }, {
+    "srcId": 10,
+    "destId": 11,
+    "forCar": true,
+    "forWalk": true,
+    "distance": 4
+  }, {
+    "srcId": 12,
+    "destId": 13,
+    "forCar": true,
+    "forWalk": true,
+    "distance": 1
+  }, {
+    "srcId": 12,
+    "destId": 14,
+    "forCar": false,
+    "forWalk": true,
+    "distance": 2
+  }, {
+    "srcId": 12,
+    "destId": 15,
+    "forCar": false,
+    "forWalk": true,
+    "distance": 2
+  }, {
+    "srcId": 13,
+    "destId": 14,
     "forCar": false,
     "forWalk": true,
     "distance": 3
+  }, {
+    "srcId": 13,
+    "destId": 16,
+    "forCar": false,
+    "forWalk": true,
+    "distance": 3
+  }, {
+    "srcId": 14,
+    "destId": 15,
+    "forCar": false,
+    "forWalk": true,
+    "distance": 1
+  }, {
+    "srcId": 14,
+    "destId": 16,
+    "forCar": false,
+    "forWalk": true,
+    "distance": 1
+  }, {
+    "srcId": 14,
+    "destId": 17,
+    "forCar": false,
+    "forWalk": true,
+    "distance": 1
+  }, {
+    "srcId": 15,
+    "destId": 17,
+    "forCar": false,
+    "forWalk": true,
+    "distance": 1
+  }, {
+    "srcId": 17,
+    "destId": 18,
+    "forCar": false,
+    "forWalk": true,
+    "distance": 1
   }]
 }
