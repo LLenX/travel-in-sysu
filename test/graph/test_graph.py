@@ -2,7 +2,7 @@ import sys
 sys.path.append('../../src')
 
 import unittest
-from graph.graph import Graph
+from model.graph.graph import Graph
 
 
 class GraphTest(unittest.TestCase):

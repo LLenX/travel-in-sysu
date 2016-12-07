@@ -32,7 +32,7 @@ def _GetSpfaResult(start, distance_to, vertex_to):
     result = []
     for vertex, dist in enumerate(distance_to):
         if dist == -1:
-            result.append((vertex, -1, []))
+            result.append(((start, vertex), -1, []))
             continue
         dest = vertex
         path = []
@@ -41,5 +41,5 @@ def _GetSpfaResult(start, distance_to, vertex_to):
             vertex = vertex_to[vertex]
         path.append(start)
         path.reverse()
-        result.append((dest, dist, path))
+        result.append(((start, dest), dist, path))
     return result

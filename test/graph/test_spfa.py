@@ -2,8 +2,8 @@ import sys
 
 sys.path.append('../../src/')
 
-from graph.spfa import Spfa
-from graph.graph import Graph
+from model.graph.spfa import Spfa
+from model.graph.graph import Graph
 import unittest
 
 
