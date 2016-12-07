@@ -1,0 +1,16 @@
+@import "variables.less";
+@import "utility.less";
+
+.description-wrapper {
+  .matrix-card();
+  margin: 10px auto;
+  padding: 15px 10px;
+  .description {
+    .selectable();
+    margin-top: 5px;
+    height: 200px;
+    overflow: auto;
+    white-space: pre-wrap;
+    word-break: break-all;
+  }
+}

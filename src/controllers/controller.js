@@ -28,13 +28,14 @@ function *selectAndReadFile(sender) {
   try {
     content = yield FilesIO.read(filepaths[0]);
   } catch (e) {
+    console.error(e);
     return e;
   }
   try {
     content = JSON.parse(content);
     content['mapPath'] = filepaths[0];
   } catch (e) {
-    content = new Error('文件内容损毁。');
+    content = new Error('文件内容不完整');
   }
   return content;
 }
@@ -52,16 +53,26 @@ function showOpenFileDialog(sender, filters) {
 
 let child = null;
 function *dealWithInput(input) {
-  if (child && child.exitCode !== null) {
+  let output = null;
+  // child exited but still is referenced
+  if (child && ((child.exitCode !== null) || input === undefined)) {
+    output = child.stdoutData;
     child = null;
+    if (output.length) {
+      return output;
+    }
   }
   if (!child) {
-    child = yield myChildProcess.ioSpawn('python3', [ path.join(__dirname, './validate.py') ]);
+    if (input) {
+      child = yield myChildProcess.ioSpawn('python3', [ path.join(__dirname, './validate.py') ]);
+    } else {
+      return null;
+    }
   }
-  let output = null;
   try {
     output = yield child.input(input);
   } catch (e) {
+    console.error(e);
     child = null;
     output = e.message;
   }

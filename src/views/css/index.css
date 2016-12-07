@@ -9,6 +9,7 @@ body {
      -moz-user-select: none;
       -ms-user-select: none;
           user-select: none;
+  cursor: default;
   font-size: 14px;
   font-family: Arial, sans-serif;
   background-color: #F5F5F5;
@@ -46,13 +47,91 @@ body {
 }
 .main .panel-container {
   width: 30%;
-  padding: 10px;
+  padding: 20px;
 }
-.main .panel-container .readfile-content {
+.main .panel-container input[type=button] {
+  -webkit-border-radius: 5px;
+          border-radius: 5px;
+  border: 0 solid #eee;
+  padding: 8px 25px;
+  cursor: pointer;
+  font-size: 16px;
+  color: #fff;
+  -webkit-box-shadow: 0 0 10px #ccc;
+          box-shadow: 0 0 10px #ccc;
+  background: rgba(71, 158, 162, 0.5);
+  outline: none;
+  -webkit-transition: background-color 0.2s ease-in-out;
+  transition: background-color 0.2s ease-in-out;
+}
+.main .panel-container input[type=button]:hover {
+  background: #4797B1;
+}
+.main .panel-container input[type=button]:disabled {
+  background-color: #ccc;
+}
+.main .panel-container input[type=button]:disabled:hover {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+.main .panel-container .title {
+  padding-bottom: 20px;
+  border-bottom: 1px #eee solid;
+  line-height: 20px;
+  font-size: 20px;
+  color: #479ea2;
+  text-align: center;
+}
+.main .panel-container .description-wrapper {
+  border: 1px solid #eee;
+  -webkit-border-radius: 8px;
+          border-radius: 8px;
+  -webkit-box-shadow: 0 3px 10px 0 rgba(0, 0, 0, 0.1);
+          box-shadow: 0 3px 10px 0 rgba(0, 0, 0, 0.1);
+  background-color: #fff;
+  margin: 10px auto;
+  padding: 15px 10px;
+}
+.main .panel-container .description-wrapper .description {
   -webkit-user-select: text;
      -moz-user-select: text;
       -ms-user-select: text;
           user-select: text;
+  cursor: initial;
+  margin-top: 5px;
+  height: 200px;
+  overflow: auto;
+  white-space: pre-wrap;
+  word-break: break-all;
+}
+.main .panel-container .query-route-panel input[type=button] {
+  padding: 8px 17px;
+  font-size: 14px;
+}
+.main .panel-container .query-route-panel .route-ends-display {
+  font-size: 0;
+}
+.main .panel-container .query-route-panel .route-ends-display .exchange-btn {
+  display: block;
+}
+.main .panel-container .query-route-panel .route-ends-display > * {
+  font-size: 14px;
+}
+.main .panel-container .query-route-panel .route-ends-display .display {
+  display: inline-block;
+  vertical-align: middle;
+  font-size: 20px;
+}
+.main .panel-container .query-route-panel .route-ends-display .route-ends {
+  width: 60%;
+}
+.main .panel-container .query-route-panel .route-ends-display .exchange-btn-wrapper {
+  width: 40%;
+}
+.main .panel-container .query-route-panel .query-btns {
+  margin: 10px auto;
+}
+.main .panel-container .readfile-content {
   white-space: pre-wrap;
   word-break: break-all;
 }

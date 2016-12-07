@@ -1,0 +1,34 @@
+.matrix-button() {
+  border-radius: 5px;
+  border: 0 solid #eee;
+  padding: 8px 25px;
+  cursor: pointer;
+  font-size: 16px;
+  color: #fff;
+  box-shadow: 0 0 10px #ccc;
+  background: rgba(71,158,162,.5);
+  outline: none;
+  transition: background-color .2s ease-in-out;
+  &:hover {
+    background: #4797B1;
+  }
+  &:disabled {
+    background-color: #ccc;
+    &:hover {
+      background-color: #ccc;
+      cursor: not-allowed;
+    }
+  }
+}
+
+.matrix-card() {
+  border: 1px solid #eee;
+  border-radius: 8px;
+  box-shadow: 0 3px 10px 0 rgba(0, 0, 0, .1);
+  background-color: #fff;
+}
+
+.selectable() {
+  user-select: text;
+  cursor: initial;
+}

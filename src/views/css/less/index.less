@@ -1,6 +1,6 @@
-@body-min-height: 768px;
-@body-min-width: 1024px;
-@body-font-size: 14px;
+@import "variables.less";
+@import "utility.less";
+
 body {
   height: 100%;
   width: 100%;
@@ -9,6 +9,7 @@ body {
   margin: 0;
   padding: 0;
   user-select: none;
+  cursor: default;
   font-size: @body-font-size; 
   font-family: Arial, sans-serif;
   background-color: #F5F5F5;
@@ -32,10 +33,7 @@ body {
     display: inline-block;
     vertical-align: top;
     
-    border: 1px solid #eee;
-    border-radius: 8px;
-    box-shadow: 0 3px 10px 0 rgba(0, 0, 0, .1);
-      background-color: #fff;
+    .matrix-card();
     box-sizing: border-box;
   }
   .map-container {
@@ -45,9 +43,22 @@ body {
   }
   .panel-container {
     width: 30%;
-    padding: 10px;
+    padding: 20px;
+    input[type=button] {
+      .matrix-button();
+    }
+    @title-font-size: 20px;
+    .title {
+      padding-bottom: 20px;
+      border-bottom: 1px #eee solid;
+      line-height: @title-font-size;
+      font-size: @title-font-size;
+      color: #479ea2;
+      text-align: center;
+    }
+    @import "description.less";
+    @import "queryRoute.less";
     .readfile-content {
-      user-select: text;
       white-space: pre-wrap;
       word-break: break-all;
     }

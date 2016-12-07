@@ -29,22 +29,22 @@ ipcRenderer.asyncOn('input-come', function *(event, windowId, input) {
   try {
     content = yield dealWithInput(input);
   } catch (e) {
+    console.error(e);
     content = `${e}`;
   }
   sender.webContents.send('output-generated', content);
 });
 
-ipcRenderer.asyncOn('select-file', function *(event, windowId) {
+ipcRenderer.asyncOn('import-map-file', function *(event, windowId) {
   let sender = BrowserWindow.fromId(windowId);
   let content = null;
   try {
     content = yield selectAndReadFile(sender);
+    yield dealWithInput();
   } catch (e) {
-    content = `${e}`;
-  }
-  if (content instanceof Error) {
-    dialog.showErrorBox('粗错啦', content.message);
+    console.error(e);
     content = null;
+    dialog.showErrorBox('粗错啦', `${e}`);
   }
-  sender.webContents.send('file-selected', content);
+  sender.webContents.send('map-file-imported', content);
 });

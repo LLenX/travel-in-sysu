@@ -1,0 +1,36 @@
+@import "variables.less";
+@import "utility.less";
+
+.query-route-panel {
+  input[type=button] {
+    padding: 8px 17px;
+    font-size: 14px;
+  }
+  .route-ends-display {
+    .exchange-btn {
+      display: block;
+    }
+
+    font-size: 0;
+    & > * {
+      font-size: @body-font-size;
+    }
+
+    .display {
+      display: inline-block;
+      vertical-align: middle;
+      font-size: 20px;
+    }
+    .route-ends {
+      width: 60%;
+    }
+
+    .exchange-btn-wrapper {
+      width: 40%;
+    }
+  }
+
+  .query-btns {
+    margin: 10px auto;
+  }
+}

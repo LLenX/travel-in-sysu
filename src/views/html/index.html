@@ -10,12 +10,36 @@
     <div class="main">
       <div class="container map-container"></div>
       <div class="container panel-container">
-        <a href="https://vmatrix.org.cn">matrix</a>
+        <div class="import-map-btn-wrapper">
+          <input type="button" class="import-map-btn" value="导入地图">
+        </div>
+        <div class="description-wrapper">
+          <div class="title">Travel in SYSU</div>
+          <div class="description">中大赛艇</div>
+        </div>
+        <div class="query-route-panel">
+          <div class="route-ends-display">
+            <div class="display route-ends">
+              <div class="route-from">
+                从 <span class="end">未指定</span>
+              </div>
+              <div class="route-to">
+                到 <span class="end">未指定</span>
+              </div>
+            </div>
+            <div class="display exchange-btn-wrapper">
+              <input type="button" class="exchange-btn" value="对调">
+            </div>
+          </div>
+          <div class="query-btns">
+            <input type="button" class="query-route-btn query-walk-route-btn" value="查询步行路线">
+            <input type="button" class="query-route-btn query-car-route-btn" value="查询驾车路线">
+          </div>
+          <div class="query-result"></div>
+        </div>
         <textarea class="input-text"></textarea>
-        <input type="button" class="input-btn" value="input">
         <div class="output-content" style="white-space: pre-wrap;"></div>
-        <input type="button" class="readfile-btn" value="read a file">
-        <div class="readfile-content" style="white-space: pre-wrap;"></div>
+        <div class="readfile-content"></div>
       </div>
     </div>
     <script>

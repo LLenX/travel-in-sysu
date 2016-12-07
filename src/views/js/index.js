@@ -48,8 +48,9 @@ bgWindow.webContents.on('did-finish-load', function() {
 
 function init() {
   $ = require('jquery');
-  $('.input-btn').on('click', inputOnClick);
-  $('.readfile-btn').on('click', readOnClick);
+  $('.import-map-btn').on('click', importMapFile);
+  $('.query-route-btn').on('click', inputOnClick);
+  $('.exchange-btn').on('click', exchangeEnds);
   $(window).on('beforeunload', function() {
     bgWindow.close();
     bgWindow = null;
@@ -73,7 +74,6 @@ function sendToBg(eventName) {
 }
 
 // click on input
-
 function inputOnClick() {
   let self = this;
   let input = $('.input-text').val();
@@ -88,14 +88,31 @@ ipcRenderer.asyncOn('output-generated', function *(event, msg) {
   $('.output-content').text($('.output-content').text() + msg);
 });
 
-// click on read a file
-function readOnClick() {
-  trigger(function *readfile() {
-    sendToBg('select-file');
+// click on import
+function importMapFile() {
+  trigger(function *() {
+    sendToBg('import-map-file');
   });
 }
 
-ipcRenderer.asyncOn('file-selected', function *(event, msg) {
+ipcRenderer.asyncOn('map-file-imported', function *(event, msg) {
   if (!msg) return;
+  function rand() {
+    return Math.floor(Math.random() * msg.spots.length);
+  }
+  let selected = rand();
   $('.readfile-content').text(JSON.stringify(msg));
+  $('.description-wrapper .title').text(msg.spots[selected].name);
+  $('.description-wrapper .description').text(msg.spots[selected].description);
+  $('.route-from .end').text(msg.spots[rand()].name);
+  $('.route-to .end').text(msg.spots[rand()].name);
 });
+
+
+// click on exchange
+function exchangeEnds() {
+  let tmp = $('.route-from .end').text()
+  $('.route-from .end').text($('.route-to .end').text());
+  $('.route-to .end').text(tmp);
+}
+
