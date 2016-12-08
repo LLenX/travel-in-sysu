@@ -55,6 +55,7 @@ function init() {
     bgWindow.close();
     bgWindow = null;
   });
+  require(path.join(__dirname, './graph.js'));
 }
 
 function trigger(gen) {
