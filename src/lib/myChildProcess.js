@@ -61,15 +61,19 @@ class ioChildProcess {
     self['inputData'] = self['stdoutData'] = self['stderrData'] = '';
     self['onOutputData'] = self['exitCode'] = null;
   }
-  input(input) {
+  input(input, isEnd) {
     let self = this;
     return new Promise((resolve, reject) => {
       self.inputData += String(input);
       self.onOutputData = function(err, outputData) {
         if (err) {
+          self.onOutputData = null, self.stderrData = '';
           return reject(outputData);
-        } else {
+        } else if (isEnd(outputData)) {
+          self.onOutputData = null, self.stdoutData = '';
           return resolve(outputData);
+        } else {
+          return resolve(null);
         }
       }
       self.stdin.write(input);
@@ -78,11 +82,8 @@ class ioChildProcess {
   onResponse(err) {
     let self = this;
     if (!self.onOutputData) return;
-    let outputData = (err ? err.message() : self.stdoutData),
-        onOutputData = self.onOutputData;
-    self.onOutputData = null;
-    err ? self.stderrData = '' : self.stdoutData = '';
-    onOutputData(err, outputData);
+    let outputData = (err ? err.message() : self.stdoutData);
+    self.onOutputData(err, outputData);
   }
 }
 
@@ -95,5 +96,3 @@ function ioSpawn(command, args, options) {
     return resolve(child);
   });
 }
-
-

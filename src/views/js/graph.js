@@ -1,16 +1,11 @@
 'use strict';
-module.exports = function(options) {
-  const {
-    onClickCallback
-  } = options;
-  return {
-    loadGraph,
-    clearMap,
-    drawPath,
-    highlightNode,
-    selectNode,
-    normalizeNode
-  };
+module.exports = {
+  loadGraph,
+  clearMap,
+  drawPath,
+  highlightNode,
+  selectNode,
+  normalizeNode
 };
 
 const path = require('path');
@@ -21,7 +16,8 @@ const bootstrap = require(path.join(__dirname, './bootstrap.js'));
 let nodeMap = [];
 let edgeMap = [];
 
-let cy;
+let cy = null;
+let onClickCallback = null;
 
 const cy_stylesheet = 
     cytoscape.stylesheet()
@@ -104,7 +100,7 @@ function loadCy(nodes, edges) {
     let node = nodes[i];
     nodeMap.push({
       data: {
-        id: String(node.id),
+        id: node.id,
         name: node.name,
         position: node.position,
         description: node.description
@@ -116,8 +112,8 @@ function loadCy(nodes, edges) {
     edgeMap.push({
       data: {
         id: 'edge' + edge.srcId + edge.destId,
-        target: String(edge.destId),
-        source: String(edge.srcId),
+        target: edge.destId,
+        source: edge.srcId,
         weight: edge.distance
       }
     });
@@ -212,6 +208,11 @@ function selectNode(nodeId, bool) {
 
 function normalizeNode(nodeId) {
   cy.$('#' + nodeId).classes('')
+}
+
+function loadGraph(onclickCb, rawMapData) {
+  loadCy(rawMapData.spots, rawMapData.routes);
+  onClickCallback = onclickCb;
 }
 
 // global.initMap = loadCy;

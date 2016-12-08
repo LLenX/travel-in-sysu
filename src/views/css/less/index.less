@@ -5,7 +5,7 @@ body {
   height: 100%;
   width: 100%;
   min-height: @body-min-height * 0.9;
-  min-width: @body-min-width * 0.7;
+  min-width: @body-min-width;
   margin: 0;
   padding: 0;
   user-select: none;
@@ -42,7 +42,7 @@ body {
     margin-right: 2%;
   }
   #cy-body {
-    background-image: url("../../east-campus.jpg");
+    background-image: url("../../data/east-campus.jpg");
     background-repeat: no-repeat;
     background-size: auto 100%;
     background-position: center;
@@ -56,7 +56,7 @@ body {
     }
     @title-font-size: 20px;
     .title {
-      padding-bottom: 20px;
+      padding-bottom: 15px;
       border-bottom: 1px #eee solid;
       line-height: @title-font-size;
       font-size: @title-font-size;
@@ -70,4 +70,12 @@ body {
       word-break: break-all;
     }
   }
+}
+
+.hidden {
+  display: none;  
+}
+
+.cy-node-tooltip {
+  position: absolute;
 }

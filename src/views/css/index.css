@@ -2,7 +2,7 @@ body {
   height: 100%;
   width: 100%;
   min-height: 691.2px;
-  min-width: 716.8px;
+  min-width: 1024px;
   margin: 0;
   padding: 0;
   -webkit-user-select: none;
@@ -31,6 +31,8 @@ body {
   height: 100%;
   display: inline-block;
   vertical-align: top;
+  margin: 10px auto;
+  padding: 15px 10px;
   border: 1px solid #eee;
   -webkit-border-radius: 8px;
           border-radius: 8px;
@@ -46,7 +48,7 @@ body {
   margin-right: 2%;
 }
 .main #cy-body {
-  background-image: url("../../east-campus.jpg");
+  background-image: url("../../data/east-campus.jpg");
   background-repeat: no-repeat;
   background-size: auto 100%;
   background-position: center;
@@ -81,7 +83,7 @@ body {
   cursor: not-allowed;
 }
 .main .panel-container .title {
-  padding-bottom: 20px;
+  padding-bottom: 15px;
   border-bottom: 1px #eee solid;
   line-height: 20px;
   font-size: 20px;
@@ -89,14 +91,14 @@ body {
   text-align: center;
 }
 .main .panel-container .description-wrapper {
+  margin: 10px auto;
+  padding: 15px 10px;
   border: 1px solid #eee;
   -webkit-border-radius: 8px;
           border-radius: 8px;
   -webkit-box-shadow: 0 3px 10px 0 rgba(0, 0, 0, 0.1);
           box-shadow: 0 3px 10px 0 rgba(0, 0, 0, 0.1);
   background-color: #fff;
-  margin: 10px auto;
-  padding: 15px 10px;
 }
 .main .panel-container .description-wrapper .description {
   -webkit-user-select: text;
@@ -110,35 +112,57 @@ body {
   white-space: pre-wrap;
   word-break: break-all;
 }
-.main .panel-container .query-route-panel input[type=button] {
+.main .panel-container .query-route-wrapper {
+  margin: 10px auto;
+  padding: 15px 10px;
+  border: 1px solid #eee;
+  -webkit-border-radius: 8px;
+          border-radius: 8px;
+  -webkit-box-shadow: 0 3px 10px 0 rgba(0, 0, 0, 0.1);
+          box-shadow: 0 3px 10px 0 rgba(0, 0, 0, 0.1);
+  background-color: #fff;
+}
+.main .panel-container .query-route-wrapper input[type=button] {
   padding: 8px 17px;
   font-size: 14px;
 }
-.main .panel-container .query-route-panel .route-ends-display {
+.main .panel-container .query-route-wrapper .title {
+  cursor: pointer;
+}
+.main .panel-container .query-route-wrapper .query-route-panel.slidedUp {
+  display: none;
+}
+.main .panel-container .query-route-wrapper .query-route-panel .route-ends-display {
   font-size: 0;
 }
-.main .panel-container .query-route-panel .route-ends-display .exchange-btn {
+.main .panel-container .query-route-wrapper .query-route-panel .route-ends-display .exchange-btn {
   display: block;
 }
-.main .panel-container .query-route-panel .route-ends-display > * {
+.main .panel-container .query-route-wrapper .query-route-panel .route-ends-display > * {
   font-size: 14px;
 }
-.main .panel-container .query-route-panel .route-ends-display .display {
+.main .panel-container .query-route-wrapper .query-route-panel .route-ends-display .display {
   display: inline-block;
   vertical-align: middle;
   font-size: 20px;
 }
-.main .panel-container .query-route-panel .route-ends-display .route-ends {
+.main .panel-container .query-route-wrapper .query-route-panel .route-ends-display .route-ends {
   width: 60%;
 }
-.main .panel-container .query-route-panel .route-ends-display .exchange-btn-wrapper {
+.main .panel-container .query-route-wrapper .query-route-panel .route-ends-display .exchange-btn-wrapper {
   width: 40%;
 }
-.main .panel-container .query-route-panel .query-btns {
+.main .panel-container .query-route-wrapper .query-route-panel .query-btns {
   margin: 10px auto;
 }
 .main .panel-container .readfile-content {
   white-space: pre-wrap;
   word-break: break-all;
+}
+.hidden {
+  display: none;
+}
+.cy-node-tooltip {
+  position: absolute;
 }
 /*# sourceMappingURL=index.css.map */

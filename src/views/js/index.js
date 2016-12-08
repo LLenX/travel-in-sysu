@@ -25,8 +25,9 @@ const bgUrl = url.format({
   slashes: true
 });
 
-let $ = null;
-let bgWindow = null;
+let $ = null,
+    bgWindow = null,
+    graph = null;
 if (isDebugging) {
   bgWindow = new BrowserWindow({
     "show": true,
@@ -50,12 +51,18 @@ function init() {
   $ = window.$ = require(path.join(__dirname, './jquery.js'));
   $('.import-map-btn').on('click', importMapFile);
   $('.query-route-btn').on('click', inputOnClick);
+  $('.input-text').on('change', function() {
+    trigger(function *sendInput() {
+      sendToBg('graph-request', $('.input-text').val());
+    });
+  });
   $('.exchange-btn').on('click', exchangeEnds);
+  $('.query-route-wrapper .title').on('click', toggleSlideUpDown).click();
+  graph = require(path.join(__dirname, './graph.js'));
   $(window).on('beforeunload', function() {
     bgWindow.close();
     bgWindow = null;
   });
-  require(path.join(__dirname, './graph.js'));
 }
 
 function trigger(gen) {
@@ -76,13 +83,13 @@ function sendToBg(eventName) {
 
 // click on input
 function inputOnClick() {
-  let self = this;
-  // let input = $('.input-text').val();
-  // $('.input-text').val('');
-  let mapData = $('.main').data('mapData');
-  let fromName = mapData.idOf[$('.route-from .end').text()],
+  const $self = $(this);
+  const mapData = $('.main').data('mapData');
+  if (!mapData) return;
+  const forCar = Number($self.hasClass('query-car-route-btn')),
+      fromName = mapData.idOf[$('.route-from .end').text()],
       toName = mapData.idOf[$('.route-to .end').text()];
-  let input = `0 ${fromName} ${toName}\n`;
+  const input = `${forCar} ${fromName} ${toName}\n`;
   trigger(function *sendInput() {
     sendToBg('graph-request', input);
   });
@@ -90,7 +97,7 @@ function inputOnClick() {
 
 ipcRenderer.asyncOn('graph-response', function *(event, msg) {
   if (!msg) return;
-  $('.output-content').text($('.output-content').text() + msg);
+  $('.query-result').text(msg);
 });
 
 // click on import
@@ -100,29 +107,128 @@ function importMapFile() {
   });
 }
 
-ipcRenderer.asyncOn('map-file-imported', function *(event, msg) {
-  if (!msg) return;
+ipcRenderer.asyncOn('map-file-imported', function *(event, mapData) {
+  if (!mapData) return;
   function rand() {
-    return Math.floor(Math.random() * msg.spots.length);
+    return Math.floor(Math.random() * mapData.spots.length);
   }
   let selected = rand();
-  $('.readfile-content').text(JSON.stringify(msg));
-  $('.description-wrapper .title').text(msg.spots[selected].name);
-  $('.description-wrapper .description').text(msg.spots[selected].description);
-  $('.route-from .end').text(msg.spots[rand()].name);
-  $('.route-to .end').text(msg.spots[rand()].name);
-  $('.main').data('mapData', msg);
-  msg['idOf'] = {};
-  msg['nameOf'] = {};
-  for (let oneSpot of msg.spots) {
-    msg['idOf'][oneSpot.name] = oneSpot.id;
-    msg['nameOf'][oneSpot.id] = oneSpot.name;
+  $('.readfile-content').text(JSON.stringify(mapData));
+  showSpotInfo(mapData.spots[selected]);
+  $('.route-from .end').text(mapData.spots[rand()].name);
+  $('.route-to .end').text(mapData.spots[rand()].name);
+  $('.main').data('mapData', mapData);
+  mapData['idOf'] = {};
+  mapData['nameOf'] = {};
+  mapData['dataOf'] = {};
+  for (let oneSpot of mapData.spots) {
+    oneSpot.id = String(oneSpot.id);
+    mapData['idOf'][oneSpot.name] = oneSpot.id;
+    mapData['nameOf'][oneSpot.id] = oneSpot.name;
+    mapData['dataOf'][oneSpot.id] = oneSpot;
   }
+  graph.loadGraph(onNodeClick, mapData);
 });
 
 // click on exchange
 function exchangeEnds() {
-  let tmp = $('.route-from .end').text()
+  const tmp = $('.route-from .end').text()
   $('.route-from .end').text($('.route-to .end').text());
   $('.route-to .end').text(tmp);
+
+  const selectedSrc = $('.query-route-panel').data('selectedSrc');
+  const selectedDest = $('.query-route-panel').data('selectedDest');
+  setSelectedNode(selectedDest, 'selectedSrc');
+  setSelectedNode(selectedSrc, 'selectedDest');
+}
+
+function onNodeClick(nodeId) {
+  const mapData = $('.main').data('mapData');
+  if (!mapData) return;
+  const curSelectedNode = mapData.dataOf[nodeId];
+  showSpotInfo(curSelectedNode);
+  if ($('.query-route-panel').data('isDoingQuery')) {
+    $('.query-route-panel').data('curSelectedNode', null);
+    switch ($('.query-route-panel').data('query-state')) {
+      case 'NONE_SELECTED':
+        setSelectedNode(curSelectedNode, 'selectedSrc', 'ONLY_SRC_SELECTED');
+        break;
+      case 'ONLY_SRC_SELECTED':
+        if (unsetSelectedNode(curSelectedNode, 'selectedSrc', 'NONE_SELECTED')) {
+          ;
+        } else {
+          setSelectedNode(curSelectedNode, 'selectedDest', 'READY');
+        }
+        break;
+      case 'ONLY_DEST_SELECTED':
+        if (unsetSelectedNode(curSelectedNode, 'selectedDest', 'NONE_SELECTED')) {
+          ;
+        } else {
+          setSelectedNode(curSelectedNode, 'selectedSrc', 'READY');
+        }
+        break;
+      case 'READY':
+        if (unsetSelectedNode(curSelectedNode, 'selectedDest', 'ONLY_SRC_SELECTED')) {
+          ;
+        } else if (unsetSelectedNode(curSelectedNode, 'selectedSrc', 'ONLY_DEST_SELECTED')) {
+          ;
+        } else {
+          setSelectedNode(curSelectedNode, 'selectedDest', 'READY');
+        }
+        break;
+      default:
+        break;
+    }
+  } else {
+    const prevSelectedNode = $('.query-route-panel').data('curSelectedNode');
+    if (prevSelectedNode) {
+      graph.normalizeNode(prevSelectedNode.id);
+    }
+    graph.selectNode(curSelectedNode.id);
+    $('.query-route-panel').data('curSelectedNode', curSelectedNode);
+    return true;
+  }
+}
+
+// demand 2: show information of selected spot
+function showSpotInfo(spot) {
+  $('.description-wrapper .title').text(spot.name);
+  const description = 
+`代号：sysu-spot-${spot.id}
+简介：${spot.description}
+`
+  $('.description-wrapper .description').text(description);
+}
+
+// 
+function toggleSlideUpDown() {
+  $('.query-route-panel').toggleClass('slidedUp');
+  $('.toggled-icon').toggle();
+  $('.query-route-panel').data('curSelectedNode', null);
+  $('.query-route-panel').data('selectedSrc', null);
+  $('.query-route-panel').data('selectedDest', null);
+  $('.query-route-panel').data('query-state', 'NONE_SELECTED')
+  if ($('.query-route-panel').hasClass('slidedUp')) {
+    $('.query-route-panel').data('isDoingQuery', false);
+  } else {
+    $('.query-route-panel').data('isDoingQuery', true);
+  }
+}
+
+function setSelectedNode(node, identity, nextState) {
+  $('.query-route-panel').data(identity, node);
+  if (nextState) {
+    $('.query-route-panel').data('query-state', nextState);
+  }
+  graph.selectNode(node.id);
+}
+function unsetSelectedNode(node, identity, nextState) {
+  const toUnselect = $('.query-route-panel').data(identity).id === node.id;
+  if (!toUnselect) return false;
+  if (nextState) {
+    $('.query-route-panel').data('query-state', nextState);
+  }
+  $('.query-route-panel').data(identity, null);
+  graph.normalizeNode(node.id);
+  return true;
 }

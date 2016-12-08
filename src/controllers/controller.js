@@ -71,19 +71,26 @@ function *sendRequest(request) {
     console.error(error);
     throw error;
   } else if (child.exitCode !== null) {
-    output = child.stdoutData;
-    child.stdoutData = '';
+    output = child.stdoutData + '\n' + child.stderrData;
+    child = null;
     if (output.length) {
       return output;
     }
   }
   try {
-    output = yield child.input(request);
+    output = yield child.input(request, (curStdout) => {
+      if (curStdout.endsWith('\n') &&
+          curStdout.split('\n').length === request.split('\n').length) {
+        return true;
+      } else {
+        return false;
+      }
+    });
   } catch (e) {
     console.error(e);
     child.kill('SIGKILL');
     child = null;
-    output = e;
+    output = `${e}`;
   }
   return output;
 }
