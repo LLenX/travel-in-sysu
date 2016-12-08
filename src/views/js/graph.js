@@ -25,8 +25,9 @@ const cy_stylesheet =
         .css({
           'content': 'data(name)',
           'title': 'data(description)',
-          'height': '20px',
-          'width': '20px'
+          'overlay-padding': '4px',
+          'height': '13px',
+          'width': '13px'
         })
       .selector('edge')
         .css({
@@ -35,7 +36,9 @@ const cy_stylesheet =
           'line-color': '#ddd',
           'target-arrow-color': '#ddd',
           'source-arrow-color': '#ddd',
-          'curve-style': 'bezier'
+          'curve-style': 'bezier',
+          'overlay-padding': '4px',
+          'text-opacity': 0
         })
       .selector('.selected')
         .css({
@@ -50,7 +53,7 @@ const cy_stylesheet =
           'line-color': '#61bffc',
           'target-arrow-color': '#61bffc',
           'source-arrow-color': '#61bffc',
-          'transition-property': 'background-color, line-color, target-arrow-color, source-arrow-color',
+          'transition-property': 'text-opacity, background-color, line-color, target-arrow-color, source-arrow-color',
           'transition-duration': '0.5s'
         })
       .selector('.positive')
@@ -126,18 +129,22 @@ function loadCy(nodes, edges) {
         edges: edgeMap
       }
     });
-  lockMap();
   cy.nodes().each(function() {
     this.position(this.data('position'))
   });
+  lockMap();
   cy.nodes().on('click', nodeClickHandler);
+  cy.nodes().on('mouseover', nodeMouseOverHandler);
+  cy.nodes().on('mouseout', nodeMouseOutHandler);
+  cy.edges().on('mouseover', edgeMouseOverHandler);
+  cy.edges().on('mouseout', edgeMouseOutHandler);
 }
 
 
 function lockMap() {
   if (cy === undefined) return;
   // 设置全局元素不可拖拽
-  //cy.elements().lock();
+  cy.elements().lock();
   // 设置不可移动
   cy.panningEnabled(false);
   // 设置不可缩放
@@ -181,20 +188,40 @@ function drawEdge(sourceId, targetId) {
 }
 
 
-let desc = null;
+let desc = null,
+    node_name = null;
 function nodeClickHandler(event) {
   desc = this.data('description');
+  node_name = this.data('name');
   if (event && event.originalEvent && event.originalEvent.offsetX && event.originalEvent.offsetY) {
     $('.cy-node-tooltip').css('top', event.originalEvent.offsetY+ 'px').css('left', event.originalEvent.offsetX + 'px'); 
     $('.cy-node-tooltip').popover({
         trigger: 'manual',
-        content: function() {
-          return desc;
-        },
+        content: () => desc,
+        title: () => node_name,
         placement: 'top'
       }).popover('show');
+      setTimeout(() => $('.cy-node-tooltip').popover('hide'), 1000);
   }
+  this.edgesWith('*').css('text-opacity', 1);
+  setTimeout(() => this.edgesWith('*').css('text-opacity', 0), 200);
   onClickCallback(this.data('id'));
+}
+
+function nodeMouseOverHandler() {
+  this.edgesWith('*').css('text-opacity', 1);
+}
+
+function nodeMouseOutHandler() {
+  this.edgesWith('*').css('text-opacity', 0);
+}
+
+function edgeMouseOverHandler() {
+  this.css('text-opacity', 1);
+}
+
+function edgeMouseOutHandler() {
+  this.css('text-opacity', 0);
 }
 
 
