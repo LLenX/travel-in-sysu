@@ -46,6 +46,7 @@ body {
   width: 65%;
   margin-left: 1.5%;
   margin-right: 2%;
+  position: relative;
 }
 .main .map-container #cy-body {
   height: 100%;

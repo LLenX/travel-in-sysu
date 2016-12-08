@@ -109,14 +109,6 @@ function importMapFile() {
 
 ipcRenderer.asyncOn('map-file-imported', function *(event, mapData) {
   if (!mapData) return;
-  function rand() {
-    return Math.floor(Math.random() * mapData.spots.length);
-  }
-  let selected = rand();
-  $('.readfile-content').text(JSON.stringify(mapData));
-  showSpotInfo(mapData.spots[selected]);
-  $('.route-from .end').text(mapData.spots[rand()].name);
-  $('.route-to .end').text(mapData.spots[rand()].name);
   $('.main').data('mapData', mapData);
   mapData['idOf'] = {};
   mapData['nameOf'] = {};
