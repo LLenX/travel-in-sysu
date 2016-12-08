@@ -31,11 +31,11 @@ const cy_stylesheet =
       .selector('edge')
         .css({
           'label': 'data(weight)',
-          'width': 3,
+          'width': '3px',
           'line-color': '#ddd',
           'target-arrow-color': '#ddd',
           'source-arrow-color': '#ddd',
-          'curve-style': 'unbundled-bezier'
+          'curve-style': 'bezier'
         })
       .selector('.selected')
         .css({
@@ -119,22 +119,25 @@ function loadCy(nodes, edges) {
     });
   }
   cy = global.cy = cytoscape({
-     container: document.getElementById('cy-body'),
-     style: cy_stylesheet,
-     elements: {
-       nodes: nodeMap,
-       edges: edgeMap
-     }
-   });
-   lockMap();
-   cy.nodes().on('click', nodeClickHandler);
+      container: document.getElementById('cy-body'),
+      style: cy_stylesheet,
+      elements: {
+        nodes: nodeMap,
+        edges: edgeMap
+      }
+    });
+  lockMap();
+  cy.nodes().each(function() {
+    this.position(this.data('position'))
+  });
+  cy.nodes().on('click', nodeClickHandler);
 }
 
 
 function lockMap() {
   if (cy === undefined) return;
   // 设置全局元素不可拖拽
-  cy.elements().lock();
+  //cy.elements().lock();
   // 设置不可移动
   cy.panningEnabled(false);
   // 设置不可缩放
@@ -178,20 +181,25 @@ function drawEdge(sourceId, targetId) {
 }
 
 
-
+let desc = null;
 function nodeClickHandler(event) {
+  desc = this.data('description');
   if (event && event.originalEvent && event.originalEvent.offsetX && event.originalEvent.offsetY) {
-    $('#for-tip').css('top', event.originalEvent.offsetY - 5 + 'px').css('left', event.originalEvent.offsetX - 5 + 'px'); 
-    $('.cy-node-tooltip').tooltip({
-      title: this.data('description')
-    });
+    $('.cy-node-tooltip').css('top', event.originalEvent.offsetY+ 'px').css('left', event.originalEvent.offsetX + 'px'); 
+    $('.cy-node-tooltip').popover({
+        trigger: 'manual',
+        content: function() {
+          return desc;
+        },
+        placement: 'top'
+      }).popover('show');
   }
   onClickCallback(this.data('id'));
 }
 
 
 function toggleNode(nodeId, bool, className) {
-  if (bool !== undefined) {
+  if (bool === undefined) {
     return cy.$('#' + nodeId).hasClass(className);
   } else {
     if (bool) cy.$('#' + nodeId).addClass(className);
@@ -215,6 +223,6 @@ function loadGraph(onclickCb, rawMapData) {
   onClickCallback = onclickCb;
 }
 
-// global.initMap = loadCy;
+global.initMap = loadCy;
 
 global.position = `[{"id":"0","position":{"x":100,"y":100}},{"id":"1","position":{"x":100,"y":100}},{"id":"2","position":{"x":100,"y":100}},{"id":"3","position":{"x":100,"y":100}},{"id":"4","position":{"x":100,"y":100}},{"id":"5","position":{"x":100,"y":100}},{"id":"6","position":{"x":100,"y":100}},{"id":"7","position":{"x":100,"y":100}},{"id":"8","position":{"x":100,"y":100}},{"id":"9","position":{"x":100,"y":100}},{"id":"10","position":{"x":100,"y":100}},{"id":"11","position":{"x":100,"y":100}},{"id":"12","position":{"x":100,"y":100}},{"id":"13","position":{"x":100,"y":100}},{"id":"14","position":{"x":100,"y":100}},{"id":"15","position":{"x":100,"y":100}},{"id":"16","position":{"x":100,"y":100}},{"id":"17","position":{"x":100,"y":100}},{"id":"18","position":{"x":100,"y":100}}]`;
