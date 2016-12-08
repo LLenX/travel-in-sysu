@@ -3,152 +3,152 @@
     "name": "牌坊",
     "id": 0,
     "position": {
-      "x": 100,
-      "y": 100
+      "x": 515,
+      "y": 43.5
     },
     "description": "不如去南校"
   }, {
     "name": "行政楼",
     "id": 1,
     "position": {
-      "x": 100,
-      "y": 100
+      "x": 476,
+      "y": 155.5
     },
     "description": "难吃"
   }, {
     "name": "超算中心",
     "id": 2,
     "position": {
-      "x": 100,
-      "y": 100
+      "x": 582.5,
+      "y": 102
     },
     "description": "不让进"
   }, {
     "name": "公共教学楼",
     "id": 3,
     "position": {
-      "x": 100,
-      "y": 100
+      "x": 545,
+      "y": 168
     },
     "description": "万恶之源"
   }, {
     "name": "图书馆",
     "id": 4,
     "position": {
-      "x": 100,
-      "y": 100
+      "x": 507,
+      "y": 215
     },
     "description": "避暑山庄"
   }, {
     "name": "田径场",
     "id": 5,
     "position": {
-      "x": 100,
-      "y": 100
+      "x": 564,
+      "y": 270
     },
     "description": "足球课一点都不水"
   }, {
     "name": "体育馆",
     "id": 6,
     "position": {
-      "x": 100,
-      "y": 100
+      "x": 507,
+      "y": 270
     },
     "description": "礼堂"
   }, {
     "name": "传设小礼堂",
     "id": 7,
     "position": {
-      "x": 100,
-      "y": 100
+      "x": 414,
+      "y": 259
     },
     "description": "看电影"
   }, {
     "name": "篮球场",
     "id": 8,
     "position": {
-      "x": 100,
-      "y": 100
+      "x": 472.5,
+      "y": 288
     },
     "description": "每次路过都怕篮球飞出来砸到自己"
   }, {
     "name": "南实验楼",
     "id": 9,
     "position": {
-      "x": 100,
-      "y": 100
+      "x": 375.5,
+      "y": 286
     },
     "description": "通往北实验楼"
   }, {
     "name": "北实验楼",
     "id": 10,
     "position": {
-      "x": 100,
-      "y": 100
+      "x": 351,
+      "y": 248
     },
     "description": "模电噩梦"
   }, {
     "name": "工学院广场",
     "id": 11,
     "position": {
-      "x": 100,
-      "y": 100
+      "x": 308,
+      "y": 311
     },
     "description": "下雨就gg"
   }, {
     "name": "格致园",
     "id": 12,
     "position": {
-      "x": 100,
-      "y": 100
+      "x": 395,
+      "y": 435
     },
     "description": "宾馆级宿舍"
   }, {
     "name": "明德园",
     "id": 13,
     "position": {
-      "x": 100,
-      "y": 100
+      "x": 470,
+      "y": 374
     },
     "description": "拿快递，食堂近"
   }, {
     "name": "活动中心",
     "id": 14,
     "position": {
-      "x": 100,
-      "y": 100
+      "x": 477,
+      "y": 452
     },
     "description": "四饭难吃"
   }, {
     "name": "慎思园",
     "id": 15,
     "position": {
-      "x": 100,
-      "y": 100
+      "x": 458.5,
+      "y": 496
     },
     "description": "好"
   }, {
     "name": "食堂",
     "id": 16,
     "position": {
-      "x": 100,
-      "y": 100
+      "x": 464,
+      "y": 425.5
     },
     "description": "很久没去了"
   }, {
     "name": "中心花坛",
     "id": 17,
     "position": {
-      "x": 100,
-      "y": 100
+      "x": 491,
+      "y": 486
     },
     "description": "挡路"
   }, {
     "name": "至善园",
     "id": 18,
     "position": {
-      "x": 100,
-      "y": 100
+      "x": 520.5,
+      "y": 481
     },
     "description": "导入该数据时老司机终于成功安装electron"
   }],
