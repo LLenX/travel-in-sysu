@@ -9,7 +9,9 @@
     <h1 class="header">Travel in SYSU</h1>
     <div class="main">
       <div class="cy-node-tooltip"></div>
-      <div id="cy-body" class="container map-container"></div>
+      <div class="container map-container">
+        <div id="cy-body"></div>
+      </div>
       <div class="container panel-container">
         <div class="import-map-btn-wrapper">
           <input type="button" class="import-map-btn" value="导入地图">
@@ -38,8 +40,9 @@
               </div>
             </div>
             <div class="query-btns">
-              <input type="button" class="query-route-btn query-walk-route-btn" value="步行路线">
-              <input type="button" class="query-route-btn query-car-route-btn" value="驾车路线">
+              <input type="button" class="query-route-btn query-walk-route-btn" value="步行">
+              <input type="button" class="query-route-btn query-car-route-btn" value="驾车">
+              <input type="button" class="query-route-btn clear-btn" value="清除">
             </div>
             <div class="query-result"></div>
           </div>

@@ -47,8 +47,10 @@ body {
   margin-left: 1.5%;
   margin-right: 2%;
 }
-.main #cy-body {
-  background-image: url("../../data/east-campus.jpg");
+.main .map-container #cy-body {
+  height: 100%;
+  width: 100%;
+  background-image: url("../../../data/east-campus.jpg");
   background-repeat: no-repeat;
   background-size: auto 100%;
   background-position: center;
@@ -58,6 +60,8 @@ body {
   padding: 20px;
 }
 .main .panel-container input[type=button] {
+  margin-right: 7px;
+  margin-left: 7px;
   -webkit-border-radius: 5px;
           border-radius: 5px;
   border: 0 solid #eee;
