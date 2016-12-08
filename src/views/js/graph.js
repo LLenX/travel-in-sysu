@@ -27,7 +27,8 @@ const cy_stylesheet =
           'title': 'data(description)',
           'overlay-padding': '4px',
           'height': '13px',
-          'width': '13px'
+          'width': '13px',
+          'text-size': '15px'
         })
       .selector('edge')
         .css({
@@ -37,7 +38,7 @@ const cy_stylesheet =
           'target-arrow-color': '#ddd',
           'source-arrow-color': '#ddd',
           'curve-style': 'bezier',
-          'overlay-padding': '4px',
+          'overlay-padding': '3px',
           'text-opacity': 0
         })
       .selector('.selected')
@@ -114,7 +115,7 @@ function loadCy(nodes, edges) {
     let edge = edges[i];
     edgeMap.push({
       data: {
-        id: 'edge' + edge.srcId + edge.destId,
+        id: `${edge.srcId}egde${edge.descId}weight${edge.distance}`,
         target: edge.destId,
         source: edge.srcId,
         weight: edge.distance
@@ -133,7 +134,7 @@ function loadCy(nodes, edges) {
     this.position(this.data('position'))
   });
   lockMap();
-  cy.nodes().on('click', nodeClickHandler);
+  cy.nodes().on('mousedown', nodeMouseDownHandler);
   cy.nodes().on('mouseover', nodeMouseOverHandler);
   cy.nodes().on('mouseout', nodeMouseOutHandler);
   cy.edges().on('mouseover', edgeMouseOverHandler);
@@ -146,9 +147,9 @@ function lockMap() {
   // 设置全局元素不可拖拽
   cy.elements().lock();
   // 设置不可移动
-  cy.panningEnabled(false);
+  // cy.panningEnabled(false);
   // 设置不可缩放
-  cy.zoomingEnabled(false);
+  // cy.zoomingEnabled(false);
 }
 
 // function onLayoutReady() {}
@@ -160,10 +161,11 @@ function clearMap() {
 }
 
 // path [node's Id]
+let timer = 0;
 function drawPath(path) {
   if (!(path instanceof Array) || path.length <= 1) throw 'haha';
   for (let i = 1; i < path.length; ++i) {
-    cy.$('#' + path[i]).addClass('.highlighted');
+    cy.$(`#${path[i]}`).addClass('highlighted');
     if (!drawEdge(path[i - 1], path[i])) {
       clearMap();
       return false;
@@ -173,13 +175,13 @@ function drawPath(path) {
 }
 
 function drawEdge(sourceId, targetId) {
-  var edge = cy.$('#' + sourceId).edgesTo('#' + targetId);
+  var edge = cy.$(`#${sourceId}`).edgesTo(`#${targetId}`);
   if (edge.length) {
     edge[0].classes('positive highlighted');
   } else {
-    edge = cy.$('#' + targetId).edgesTo('#' + sourceId);
+    edge = cy.$(`#${targetId}`).edgesTo(`#${sourceId}`);
     if (edge.length) {
-      edge[0].classes('negative highlighted');
+      edge[0].classes('inverse highlighted');
     } else {
       return false;
     }
@@ -190,11 +192,11 @@ function drawEdge(sourceId, targetId) {
 
 let desc = null,
     node_name = null;
-function nodeClickHandler(event) {
+function nodeMouseDownHandler(event) {
   desc = this.data('description');
   node_name = this.data('name');
   if (event && event.originalEvent && event.originalEvent.offsetX && event.originalEvent.offsetY) {
-    $('.cy-node-tooltip').css('top', event.originalEvent.offsetY+ 'px').css('left', event.originalEvent.offsetX + 'px'); 
+    $('.cy-node-tooltip').css('top', `${event.originalEvent.offsetY}px`).css('left', `${event.originalEvent.offsetX}px`); 
     $('.cy-node-tooltip').popover({
         trigger: 'manual',
         content: () => desc,
@@ -203,8 +205,6 @@ function nodeClickHandler(event) {
       }).popover('show');
       setTimeout(() => $('.cy-node-tooltip').popover('hide'), 1000);
   }
-  this.edgesWith('*').css('text-opacity', 1);
-  setTimeout(() => this.edgesWith('*').css('text-opacity', 0), 200);
   onClickCallback(this.data('id'));
 }
 
@@ -227,10 +227,10 @@ function edgeMouseOutHandler() {
 
 function toggleNode(nodeId, bool, className) {
   if (bool === undefined) {
-    return cy.$('#' + nodeId).hasClass(className);
+    return cy.$(`#${nodeId}`).hasClass(className);
   } else {
-    if (bool) cy.$('#' + nodeId).addClass(className);
-    else cy.$('#' + nodeId).removeClass(className);
+    if (bool) cy.$(`#${nodeId}`).addClass(className);
+    else cy.$(`#${nodeId}`).removeClass(className);
   }
 }
 function highlightNode(nodeId, bool) {
@@ -242,7 +242,7 @@ function selectNode(nodeId, bool) {
 }
 
 function normalizeNode(nodeId) {
-  cy.$('#' + nodeId).classes('')
+  cy.$(`#${nodeId}`).classes('')
 }
 
 function loadGraph(onclickCb, rawMapData) {
