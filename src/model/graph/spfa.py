@@ -22,7 +22,7 @@ def Spfa(graph, start):
                             cur_vertex] + weight:
                 distance_to[vertex] = weight + distance_to[cur_vertex]
                 vertex_to[vertex] = cur_vertex
-                if cur_vertex not in bfs_q:
+                if vertex not in bfs_q:
                     bfs_q.append(vertex)
 
     return _GetSpfaResult(start, distance_to, vertex_to)
