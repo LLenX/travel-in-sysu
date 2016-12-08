@@ -15,7 +15,7 @@ body {
   background-color: #F5F5F5;
 }
 .header {
-  margin-top: 3%;
+  margin-top: 2%;
   font-size: 40px;
   text-align: center;
 }
@@ -44,6 +44,12 @@ body {
   width: 65%;
   margin-left: 1.5%;
   margin-right: 2%;
+}
+.main #cy-body {
+  background-image: url("../../east-campus.jpg");
+  background-repeat: no-repeat;
+  background-size: auto 100%;
+  background-position: center;
 }
 .main .panel-container {
   width: 30%;

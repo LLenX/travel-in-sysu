@@ -40,6 +40,7 @@ ipcRenderer.asyncOn('import-map-file', function *(event, windowId) {
   let content = null;
   try {
     content = yield selectAndReadFile(sender);
+    if (!content) return;
     yield startGraphServer(content.mapdatPath);
   } catch (e) {
     console.error(e);
