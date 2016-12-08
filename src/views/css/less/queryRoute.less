@@ -9,6 +9,20 @@
   }
   .title {
     cursor: pointer;
+    @size: 15px;
+    .toggled-icon {
+      display: inline-block;
+      height: @size;
+      width: @size;
+      border-width: 0 @size / 2 @size;
+      border-style: solid;
+      border-bottom-color: #479ea2;
+      color: transparent;
+      &.slided-up {
+        border-width: @size @size / 2 0;
+        border-top-color: #479ea2;
+      }
+    }
   }
   .query-route-panel {
     &.slidedUp {
@@ -27,10 +41,13 @@
       .display {
         display: inline-block;
         vertical-align: middle;
-        font-size: 20px;
+        font-size: 15px;
       }
       .route-ends {
         width: 60%;
+        .end {
+          font-size: 18px;
+        }
       }
 
       .exchange-btn-wrapper {
@@ -38,8 +55,12 @@
       }
     }
 
-    .query-btns {
+    .control-btns {
       margin: 10px auto;
+    }
+    .query-result {
+      white-space: pre-wrap;
+      word-break: break-all;
     }
   }
 }

@@ -134,6 +134,19 @@ body {
 .main .panel-container .query-route-wrapper .title {
   cursor: pointer;
 }
+.main .panel-container .query-route-wrapper .title .toggled-icon {
+  display: inline-block;
+  height: 15px;
+  width: 15px;
+  border-width: 0 7.5px 15px;
+  border-style: solid;
+  border-bottom-color: #479ea2;
+  color: transparent;
+}
+.main .panel-container .query-route-wrapper .title .toggled-icon.slided-up {
+  border-width: 15px 7.5px 0;
+  border-top-color: #479ea2;
+}
 .main .panel-container .query-route-wrapper .query-route-panel.slidedUp {
   display: none;
 }
@@ -149,25 +162,32 @@ body {
 .main .panel-container .query-route-wrapper .query-route-panel .route-ends-display .display {
   display: inline-block;
   vertical-align: middle;
-  font-size: 20px;
+  font-size: 15px;
 }
 .main .panel-container .query-route-wrapper .query-route-panel .route-ends-display .route-ends {
   width: 60%;
 }
+.main .panel-container .query-route-wrapper .query-route-panel .route-ends-display .route-ends .end {
+  font-size: 18px;
+}
 .main .panel-container .query-route-wrapper .query-route-panel .route-ends-display .exchange-btn-wrapper {
   width: 40%;
 }
-.main .panel-container .query-route-wrapper .query-route-panel .query-btns {
+.main .panel-container .query-route-wrapper .query-route-panel .control-btns {
   margin: 10px auto;
 }
-.main .panel-container .readfile-content {
+.main .panel-container .query-route-wrapper .query-route-panel .query-result {
   white-space: pre-wrap;
   word-break: break-all;
 }
-.hidden {
+.my-hidden {
   display: none;
 }
-.cy-node-tooltip {
+.cy-node-tooltip,
+.cy-tooltip {
   position: absolute;
+}
+h3.popover-title {
+  text-align: center;
 }
 /*# sourceMappingURL=index.css.map */

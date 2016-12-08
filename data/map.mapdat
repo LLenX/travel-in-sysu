@@ -3,7 +3,7 @@
     "name": "牌坊",
     "id": 0,
     "position": {
-      "x": 507,
+      "x": 407,
       "y": 47.5
     },
     "description": "不如去南校"
@@ -11,7 +11,7 @@
     "name": "行政楼",
     "id": 1,
     "position": {
-      "x": 476,
+      "x": 376,
       "y": 155.5
     },
     "description": "难吃"
@@ -19,7 +19,7 @@
     "name": "超算中心",
     "id": 2,
     "position": {
-      "x": 589.5,
+      "x": 489.5,
       "y": 85
     },
     "description": "不让进"
@@ -27,7 +27,7 @@
     "name": "公共教学楼",
     "id": 3,
     "position": {
-      "x": 545,
+      "x": 445,
       "y": 168
     },
     "description": "万恶之源"
@@ -35,7 +35,7 @@
     "name": "图书馆",
     "id": 4,
     "position": {
-      "x": 507,
+      "x": 407,
       "y": 215
     },
     "description": "避暑山庄"
@@ -43,7 +43,7 @@
     "name": "田径场",
     "id": 5,
     "position": {
-      "x": 564,
+      "x": 464,
       "y": 270
     },
     "description": "足球课一点都不水"
@@ -51,7 +51,7 @@
     "name": "体育馆",
     "id": 6,
     "position": {
-      "x": 507,
+      "x": 407,
       "y": 270
     },
     "description": "礼堂"
@@ -59,7 +59,7 @@
     "name": "传设小礼堂",
     "id": 7,
     "position": {
-      "x": 414,
+      "x": 314,
       "y": 259
     },
     "description": "看电影"
@@ -67,31 +67,31 @@
     "name": "篮球场",
     "id": 8,
     "position": {
-      "x": 472.5,
+      "x": 372.5,
       "y": 288
     },
-    "description": "每次路过都怕篮球飞出来砸到自己"
+    "description": "挥洒热血"
   }, {
     "name": "南实验楼",
     "id": 9,
     "position": {
-      "x": 375.5,
-      "y": 286
+      "x": 255.5,
+      "y": 300
     },
     "description": "通往北实验楼"
   }, {
     "name": "北实验楼",
     "id": 10,
     "position": {
-      "x": 351,
-      "y": 248
+      "x": 251,
+      "y": 228
     },
     "description": "模电噩梦"
   }, {
     "name": "工学院广场",
     "id": 11,
     "position": {
-      "x": 308,
+      "x": 198,
       "y": 311
     },
     "description": "下雨就gg"
@@ -99,15 +99,15 @@
     "name": "格致园",
     "id": 12,
     "position": {
-      "x": 395,
-      "y": 435
+      "x": 295,
+      "y": 405
     },
     "description": "宾馆级宿舍"
   }, {
     "name": "明德园",
     "id": 13,
     "position": {
-      "x": 454,
+      "x": 354,
       "y": 363
     },
     "description": "拿快递，食堂近"
@@ -115,40 +115,32 @@
     "name": "活动中心",
     "id": 14,
     "position": {
-      "x": 477,
-      "y": 452
+      "x": 377,
+      "y": 502
     },
     "description": "四饭难吃"
   }, {
     "name": "慎思园",
     "id": 15,
     "position": {
-      "x": 458.5,
-      "y": 496
+      "x": 358.5,
+      "y": 546
     },
     "description": "好"
   }, {
     "name": "食堂",
     "id": 16,
     "position": {
-      "x": 458,
+      "x": 358,
       "y": 425.5
     },
     "description": "很久没去了"
   }, {
-    "name": "中心花坛",
+    "name": "至善园",
     "id": 17,
     "position": {
-      "x": 491,
-      "y": 486
-    },
-    "description": "挡路"
-  }, {
-    "name": "至善园",
-    "id": 18,
-    "position": {
-      "x": 520.5,
-      "y": 481
+      "x": 420.5,
+      "y": 531
     },
     "description": "导入该数据时老司机终于成功安装electron"
   }],
@@ -215,9 +207,9 @@
   }, {
     "srcId": 6,
     "destId": 8,
-    "forCar": false,
+    "forCar": true,
     "forWalk": true,
-    "distance": 6
+    "distance": 3
   }, {
     "srcId": 6,
     "destId": 13,
@@ -229,11 +221,11 @@
     "destId": 16,
     "forCar": true,
     "forWalk": true,
-    "distance": 3
+    "distance": 9
   }, {
     "srcId": 7,
     "destId": 8,
-    "forCar": false,
+    "forCar": true,
     "forWalk": true,
     "distance": 2
   }, {
@@ -241,7 +233,7 @@
     "destId": 9,
     "forCar": true,
     "forWalk": true,
-    "distance": 1
+    "distance": 2
   }, {
     "srcId": 9,
     "destId": 10,
@@ -259,7 +251,7 @@
     "destId": 12,
     "forCar": true,
     "forWalk": true,
-    "distance": 15
+    "distance": 10
   }, {
     "srcId": 10,
     "destId": 11,
@@ -277,19 +269,13 @@
     "destId": 14,
     "forCar": false,
     "forWalk": true,
-    "distance": 2
+    "distance": 5
   }, {
     "srcId": 12,
     "destId": 15,
     "forCar": false,
     "forWalk": true,
-    "distance": 2
-  }, {
-    "srcId": 13,
-    "destId": 14,
-    "forCar": false,
-    "forWalk": true,
-    "distance": 3
+    "distance": 6
   }, {
     "srcId": 13,
     "destId": 16,
@@ -305,24 +291,12 @@
   }, {
     "srcId": 14,
     "destId": 16,
-    "forCar": false,
-    "forWalk": true,
-    "distance": 1
-  }, {
-    "srcId": 14,
-    "destId": 17,
     "forCar": false,
     "forWalk": true,
     "distance": 1
   }, {
     "srcId": 15,
     "destId": 17,
-    "forCar": false,
-    "forWalk": true,
-    "distance": 1
-  }, {
-    "srcId": 17,
-    "destId": 18,
     "forCar": false,
     "forWalk": true,
     "distance": 1

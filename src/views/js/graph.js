@@ -20,6 +20,7 @@ let edgeMap = [];
 
 let cy = null;
 let onClickCallback = null;
+let onZoom = null;
 
 let positionSet = {};
 
@@ -147,6 +148,7 @@ function loadCy(nodes, edges) {
   cy.nodes().on('mouseout', nodeMouseOutHandler);
   cy.edges().on('mouseover', edgeMouseOverHandler);
   cy.edges().on('mouseout', edgeMouseOutHandler);
+  cy.on('zoom', zoomHandler);
 }
 
 
@@ -234,6 +236,10 @@ function edgeMouseOutHandler() {
   this.css('text-opacity', 0);
 }
 
+function zoomHandler() {
+  onZoom();
+}
+
 
 function toggleNode(nodeId, bool, className) {
   if (bool === undefined) {
@@ -255,9 +261,10 @@ function normalizeNode(nodeId) {
   cy.$(`#${nodeId}`).classes('')
 }
 
-function loadGraph(onclickCb, rawMapData) {
+function loadGraph(handlers, rawMapData) {
   loadCy(rawMapData.spots, rawMapData.routes);
-  onClickCallback = onclickCb;
+  onClickCallback = handlers.onClickCallback;
+  onZoom = handlers.onZoom;
 }
 
 function setTooltip(nodeId, show, selector) {
