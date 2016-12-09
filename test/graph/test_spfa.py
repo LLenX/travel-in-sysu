@@ -22,7 +22,7 @@ class TestSpfa(unittest.TestCase):
         self.assertEqual(len(results), 11)
         for result in results:
             with self.subTest(vertex=result[0]):
-                if result[0] != 10:
+                if result[0] != (10, 10):
                     self.assertEqual(result[1], -1)
                     self.assertEqual(len(result[2]), 0)
                 else:
