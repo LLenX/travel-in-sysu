@@ -5,7 +5,9 @@ module.exports = {
   drawPath,
   highlightNode,
   selectNode,
-  normalizeNode
+  normalizeNode,
+  setSrcTooltip,
+  setDestTooltip
 };
 
 const path = require('path');
@@ -18,17 +20,21 @@ let edgeMap = [];
 
 let cy = null;
 let onClickCallback = null;
+let onZoom = null;
+
+let positionSet = {};
 
 const cy_stylesheet = 
     cytoscape.stylesheet()
-      .selector('node')
+      .selector('node, node:selected')
         .css({
           'content': 'data(name)',
           'title': 'data(description)',
           'overlay-padding': '4px',
           'height': '13px',
           'width': '13px',
-          'text-size': '15px'
+          'font-size': '12px',
+          'background-color': '#999'
         })
       .selector('edge')
         .css({
@@ -39,12 +45,14 @@ const cy_stylesheet =
           'source-arrow-color': '#ddd',
           'curve-style': 'bezier',
           'overlay-padding': '3px',
-          'text-opacity': 0
+          'text-opacity': 0,
+          'font-size': '12px'
         })
       .selector('.selected')
         .css({
           'border-color': '#feff00',
           'border-width': '2px',
+          'line-color': '#61bffc',
           'border-style': 'solid',
           'background-color': 'red'
         })
@@ -115,13 +123,14 @@ function loadCy(nodes, edges) {
     let edge = edges[i];
     edgeMap.push({
       data: {
-        id: `${edge.srcId}egde${edge.descId}weight${edge.distance}`,
+        id: `${edge.srcId}egde${edge.destId}weight${edge.distance}`,
         target: edge.destId,
         source: edge.srcId,
         weight: edge.distance
       }
     });
   }
+  console.log(edgeMap, nodeMap.length);
   cy = global.cy = cytoscape({
       container: document.getElementById('cy-body'),
       style: cy_stylesheet,
@@ -139,6 +148,7 @@ function loadCy(nodes, edges) {
   cy.nodes().on('mouseout', nodeMouseOutHandler);
   cy.edges().on('mouseover', edgeMouseOverHandler);
   cy.edges().on('mouseout', edgeMouseOutHandler);
+  cy.on('zoom', zoomHandler);
 }
 
 
@@ -196,24 +206,26 @@ function nodeMouseDownHandler(event) {
   desc = this.data('description');
   node_name = this.data('name');
   if (event && event.originalEvent && event.originalEvent.offsetX && event.originalEvent.offsetY) {
-    $('.cy-node-tooltip').css('top', `${event.originalEvent.offsetY}px`).css('left', `${event.originalEvent.offsetX}px`); 
+    positionSet[this.data('id')] = {x: event.originalEvent.offsetX, y: event.originalEvent.offsetY};
+    $('.cy-node-tooltip').css('top', `${event.originalEvent.offsetY + 15}px`)
+      .css('left', `${event.originalEvent.offsetX + 10}px`); 
     $('.cy-node-tooltip').popover({
         trigger: 'manual',
         content: () => desc,
         title: () => node_name,
         placement: 'top'
       }).popover('show');
-      setTimeout(() => $('.cy-node-tooltip').popover('hide'), 1000);
+    setTimeout(() => $('.cy-node-tooltip').popover('hide'), 1000);
   }
   onClickCallback(this.data('id'));
 }
 
 function nodeMouseOverHandler() {
-  this.edgesWith('*').css('text-opacity', 1);
+  this.edgesWith('*').css('text-opacity', 1).addClass('selected');
 }
 
 function nodeMouseOutHandler() {
-  this.edgesWith('*').css('text-opacity', 0);
+  this.edgesWith('*').css('text-opacity', 0).removeClass('selected');
 }
 
 function edgeMouseOverHandler() {
@@ -222,6 +234,10 @@ function edgeMouseOverHandler() {
 
 function edgeMouseOutHandler() {
   this.css('text-opacity', 0);
+}
+
+function zoomHandler() {
+  onZoom();
 }
 
 
@@ -245,11 +261,27 @@ function normalizeNode(nodeId) {
   cy.$(`#${nodeId}`).classes('')
 }
 
-function loadGraph(onclickCb, rawMapData) {
+function loadGraph(handlers, rawMapData) {
   loadCy(rawMapData.spots, rawMapData.routes);
-  onClickCallback = onclickCb;
+  onClickCallback = handlers.onClickCallback;
+  onZoom = handlers.onZoom;
 }
 
-global.initMap = loadCy;
+function setTooltip(nodeId, show, selector) {
+  console.log(selector)
+  $(selector)
+    .css('top', `${positionSet[nodeId] ? positionSet[nodeId].y + 15 : 0}px`)
+      .css('left', `${positionSet[nodeId] ? positionSet[nodeId].x + 10 : 0}px`);
+  if (show) $(selector).tooltip('show');
+  else $(selector).tooltip('hide');
+}
 
-global.position = `[{"id":"0","position":{"x":100,"y":100}},{"id":"1","position":{"x":100,"y":100}},{"id":"2","position":{"x":100,"y":100}},{"id":"3","position":{"x":100,"y":100}},{"id":"4","position":{"x":100,"y":100}},{"id":"5","position":{"x":100,"y":100}},{"id":"6","position":{"x":100,"y":100}},{"id":"7","position":{"x":100,"y":100}},{"id":"8","position":{"x":100,"y":100}},{"id":"9","position":{"x":100,"y":100}},{"id":"10","position":{"x":100,"y":100}},{"id":"11","position":{"x":100,"y":100}},{"id":"12","position":{"x":100,"y":100}},{"id":"13","position":{"x":100,"y":100}},{"id":"14","position":{"x":100,"y":100}},{"id":"15","position":{"x":100,"y":100}},{"id":"16","position":{"x":100,"y":100}},{"id":"17","position":{"x":100,"y":100}},{"id":"18","position":{"x":100,"y":100}}]`;
+function setSrcTooltip(nodeId, show) {
+  $('.cy-src-tooltip').tooltip({title: '始'});
+  setTooltip(nodeId, show, '.cy-src-tooltip');
+}
+
+function setDestTooltip(nodeId, show) {
+  $('.cy-dest-tooltip').tooltip({title: '终'});
+  setTooltip(nodeId, show, '.cy-dest-tooltip');
+}

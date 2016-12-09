@@ -82,7 +82,7 @@ class ioChildProcess {
   onResponse(err) {
     let self = this;
     if (!self.onOutputData) return;
-    let outputData = (err ? err.message() : self.stdoutData);
+    let outputData = (err ? err.message : self.stdoutData);
     self.onOutputData(err, outputData);
   }
 }

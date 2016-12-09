@@ -86,6 +86,7 @@ function *sendRequest(request) {
         return false;
       }
     });
+    output = JSON.parse(output);
   } catch (e) {
     console.error(e);
     child.kill('SIGKILL');

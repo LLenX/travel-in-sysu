@@ -1,5 +1,5 @@
 'use strict';
-const isDebugging = (process.env.NODE_ENV == 'development');
+const isDebugging = (process.env.NODE_ENV === 'development');
 const path = require('path');
 const url = require('url');
 const {
@@ -47,22 +47,90 @@ bgWindow.webContents.on('did-finish-load', function() {
   return init();
 });
 
+// click on import
+function importMapFile() {
+  trigger(function *() {
+    sendToBg('import-map-file');
+  });
+}
+
+ipcRenderer.asyncOn('map-file-imported', function *(event, mapData) {
+  if (!mapData) return;
+  $('.main').data('mapData', mapData);
+  mapDataInit(mapData);
+  graph.loadGraph({
+    "onClickCallback": onNodeClick,
+    "onZoom": clearSrcDestToopTip
+  }, mapData);
+});
+
+// click on request
+function requestRoute() {
+  const $self = $(this);
+  const mapData = $('.main').data('mapData');
+  if (!mapData) return;
+  const forCar = Number($self.hasClass('query-car-route-btn')),
+        selectedSrc = $('.query-route-panel').data('selectedSrc'),
+        selectedDest = $('.query-route-panel').data('selectedDest');
+  if (selectedSrc === null && selectedDest === null) {
+    return;
+  }
+  const input = `${forCar} ${selectedSrc.id} ${selectedDest.id}\n`;
+  $('.query-route-panel').data('query-car-route', Boolean(forCar));
+  trigger(function *sendInput() {
+    sendToBg('graph-request', input);
+  });
+}
+
+ipcRenderer.asyncOn('graph-response', function *(event, msg) {
+  if (!msg) return;
+  const mapData = $('.main').data('mapData');
+  if (!mapData) return;
+  const how = $('.query-route-panel').data('query-car-route') ? '驾车': '步行',
+        selectedSrc = $('.query-route-panel').data('selectedSrc'),
+        selectedDest = $('.query-route-panel').data('selectedDest');
+  let text = `从${selectedSrc.name}到${selectedDest.name}的${how}路径`;
+  if (msg.path.length <= 1) {
+    text = `未找到${text}`;
+    if ($('.query-route-panel').data('selectedDest')) {
+      graph.selectNode($('.query-route-panel').data('selectedDest').id, true);
+    }
+    if ($('.query-route-panel').data('selectedSrc')) {
+      graph.selectNode($('.query-route-panel').data('selectedSrc').id, true);
+    }
+  } else {
+    text += `：\n${msg.path.join(' -> ')}\n距离：${msg.distance}`;
+  }
+  $('.query-result').text(text);
+  graph.clearMap();
+  graph.drawPath(msg.path.map((oneName) => mapData.idOf[oneName]));
+});
+
+
+// utils
+
 function init() {
   $ = window.$ = require(path.join(__dirname, './jquery.js'));
+  graph = require(path.join(__dirname, './graph.js'));
+
   $('.import-map-btn').on('click', importMapFile);
-  $('.query-route-btn').on('click', inputOnClick);
-  $('.input-text').on('change', function() {
-    trigger(function *sendInput() {
-      sendToBg('graph-request', $('.input-text').val());
-    });
-  });
+  $('.query-route-btn').on('click', requestRoute);
   $('.exchange-btn').on('click', exchangeEnds);
   $('.query-route-wrapper .title').on('click', toggleSlideUpDown).click();
-  graph = require(path.join(__dirname, './graph.js'));
+  $('.clear-btn').on('click', clear).click();
+
   $(window).on('beforeunload', function() {
     bgWindow.close();
     bgWindow = null;
   });
+
+  if (isDebugging) {
+    $('.input-text').on('change', function() {
+      trigger(function *sendInput() {
+        sendToBg('graph-request', $('.input-text').val());
+      });
+    });
+  }
 }
 
 function trigger(gen) {
@@ -81,57 +149,13 @@ function sendToBg(eventName) {
                                     .concat(Array.prototype.slice.call(arguments, 1)));
 }
 
-// click on input
-function inputOnClick() {
-  const $self = $(this);
-  const mapData = $('.main').data('mapData');
-  if (!mapData) return;
-  const forCar = Number($self.hasClass('query-car-route-btn')),
-      fromName = mapData.idOf[$('.route-from .end').text()],
-      toName = mapData.idOf[$('.route-to .end').text()];
-  const input = `${forCar} ${fromName} ${toName}\n`;
-  trigger(function *sendInput() {
-    sendToBg('graph-request', input);
-  });
-}
-
-ipcRenderer.asyncOn('graph-response', function *(event, msg) {
-  if (!msg) return;
-  $('.query-result').text(msg);
-});
-
-// click on import
-function importMapFile() {
-  trigger(function *() {
-    sendToBg('import-map-file');
-  });
-}
-
-ipcRenderer.asyncOn('map-file-imported', function *(event, mapData) {
-  if (!mapData) return;
-  $('.main').data('mapData', mapData);
-  mapData['idOf'] = {};
-  mapData['nameOf'] = {};
-  mapData['dataOf'] = {};
-  for (let oneSpot of mapData.spots) {
-    oneSpot.id = String(oneSpot.id);
-    mapData['idOf'][oneSpot.name] = oneSpot.id;
-    mapData['nameOf'][oneSpot.id] = oneSpot.name;
-    mapData['dataOf'][oneSpot.id] = oneSpot;
-  }
-  graph.loadGraph(onNodeClick, mapData);
-});
-
-// click on exchange
 function exchangeEnds() {
-  const tmp = $('.route-from .end').text()
-  $('.route-from .end').text($('.route-to .end').text());
-  $('.route-to .end').text(tmp);
-
   const selectedSrc = $('.query-route-panel').data('selectedSrc');
   const selectedDest = $('.query-route-panel').data('selectedDest');
+  graph.clearMap();
   setSelectedNode(selectedDest, 'selectedSrc');
   setSelectedNode(selectedSrc, 'selectedDest');
+  setSelectedNode(selectedDest, 'selectedSrc');
 }
 
 function onNodeClick(nodeId) {
@@ -139,6 +163,13 @@ function onNodeClick(nodeId) {
   if (!mapData) return;
   const curSelectedNode = mapData.dataOf[nodeId];
   showSpotInfo(curSelectedNode);
+  graph.clearMap();
+  if ($('.query-route-panel').data('selectedDest')) {
+    graph.selectNode($('.query-route-panel').data('selectedDest').id, true);
+  }
+  if ($('.query-route-panel').data('selectedSrc')) {
+    graph.selectNode($('.query-route-panel').data('selectedSrc').id, true);
+  }
   if ($('.query-route-panel').data('isDoingQuery')) {
     $('.query-route-panel').data('curSelectedNode', null);
     switch ($('.query-route-panel').data('query-state')) {
@@ -171,15 +202,25 @@ function onNodeClick(nodeId) {
       default:
         break;
     }
+    if ($('.query-route-panel').data('query-state') === 'READY') {
+      $('.query-route-btn').prop('disabled', false);
+    } else {
+      $('.query-route-btn').prop('disabled', true);
+    }
   } else {
     const prevSelectedNode = $('.query-route-panel').data('curSelectedNode');
     if (prevSelectedNode) {
-      graph.normalizeNode(prevSelectedNode.id);
+      graph.selectNode(prevSelectedNode.id, false);
     }
-    graph.selectNode(curSelectedNode.id);
+    graph.selectNode(curSelectedNode.id, true);
     $('.query-route-panel').data('curSelectedNode', curSelectedNode);
     return true;
   }
+}
+
+function clearSrcDestToopTip() {
+  graph.setSrcTooltip(0, false);
+  graph.setDestTooltip(0, false);
 }
 
 // demand 2: show information of selected spot
@@ -192,14 +233,10 @@ function showSpotInfo(spot) {
   $('.description-wrapper .description').text(description);
 }
 
-// 
 function toggleSlideUpDown() {
   $('.query-route-panel').toggleClass('slidedUp');
-  $('.toggled-icon').toggle();
-  $('.query-route-panel').data('curSelectedNode', null);
-  $('.query-route-panel').data('selectedSrc', null);
-  $('.query-route-panel').data('selectedDest', null);
-  $('.query-route-panel').data('query-state', 'NONE_SELECTED')
+  $('.toggled-icon').toggleClass('slided-up');
+  clear();
   if ($('.query-route-panel').hasClass('slidedUp')) {
     $('.query-route-panel').data('isDoingQuery', false);
   } else {
@@ -207,20 +244,70 @@ function toggleSlideUpDown() {
   }
 }
 
+function clear() {
+  if ($('.query-route-panel').data('curSelectedNode')) {
+    graph.selectNode($('.query-route-panel').data('curSelectedNode').id, false);
+  }
+  $('.query-route-panel').data('curSelectedNode', null);
+  setSelectedNode(null, 'selectedSrc', 'NONE_SELECTED');
+  setSelectedNode(null, 'selectedDest', 'NONE_SELECTED');
+  $('.query-route-btn').prop('disabled', true);
+  graph.clearMap();
+  clearSrcDestToopTip();
+}
+
 function setSelectedNode(node, identity, nextState) {
+  let prevSelectedNode = $('.query-route-panel').data(identity);
+  if (prevSelectedNode) {
+    unsetSelectedNode(prevSelectedNode, identity);
+  }
   $('.query-route-panel').data(identity, node);
   if (nextState) {
     $('.query-route-panel').data('query-state', nextState);
   }
-  graph.selectNode(node.id);
+  if (node !== null) {
+    graph.selectNode(node.id, true);
+  }
+  if (identity === 'selectedSrc') {
+    $('.route-src .end').text((node && node.name) || '未指定');
+    if (node !== null) {
+      graph.setSrcTooltip(node.id, true);
+    }
+  } else if (identity === 'selectedDest') {
+    $('.route-dest .end').text((node && node.name) || '未指定');
+    if (node !== null) {
+      graph.setDestTooltip(node.id, true);
+    }
+  }
 }
 function unsetSelectedNode(node, identity, nextState) {
   const toUnselect = $('.query-route-panel').data(identity).id === node.id;
   if (!toUnselect) return false;
   if (nextState) {
     $('.query-route-panel').data('query-state', nextState);
+    if (node && nextState !== 'READY') {
+      if (identity === 'selectedSrc') graph.setSrcTooltip(node.id, false);
+      if (identity === 'selectedDest') graph.setDestTooltip(node.id, false);
+    }
   }
   $('.query-route-panel').data(identity, null);
-  graph.normalizeNode(node.id);
+  graph.selectNode(node.id, false);
+  if (identity === 'selectedSrc') {
+    $('.route-src .end').text('未指定');
+  } else if (identity === 'selectedDest') {
+    $('.route-dest .end').text('未指定');
+  }
   return true;
+}
+
+function mapDataInit(mapData) {
+  mapData['idOf'] = {};
+  mapData['nameOf'] = {};
+  mapData['dataOf'] = {};
+  for (let oneSpot of mapData.spots) {
+    oneSpot.id = String(oneSpot.id);
+    mapData['idOf'][oneSpot.name] = oneSpot.id;
+    mapData['nameOf'][oneSpot.id] = oneSpot.name;
+    mapData['dataOf'][oneSpot.id] = oneSpot;
+  }
 }

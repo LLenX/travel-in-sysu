@@ -11,6 +11,8 @@
     <div class="main">
       <div class="container map-container">
         <div class="cy-node-tooltip"></div>
+        <div class="cy-src-tooltip cy-tooltip"></div>
+        <div class="cy-dest-tooltip cy-tooltip"></div>
         <div id="cy-body"></div>
       </div>
       <div class="container panel-container">
@@ -23,16 +25,15 @@
         </div>
         <div class="query-route-wrapper">
           <div class="title">查询路线
-            <span class="toggled-icon hidden">展开</span>
-            <span class="toggled-icon">收起</span>
+            <span class="toggled-icon"></span>
           </div>
           <div class="query-route-panel">
             <div class="route-ends-display">
               <div class="display route-ends">
-                <div class="route-from">
+                <div class="route-src">
                   从 <span class="end">未指定</span>
                 </div>
-                <div class="route-to">
+                <div class="route-dest">
                   到 <span class="end">未指定</span>
                 </div>
               </div>
@@ -40,17 +41,14 @@
                 <input type="button" class="exchange-btn" value="对调">
               </div>
             </div>
-            <div class="query-btns">
+            <div class="control-btns">
               <input type="button" class="query-route-btn query-walk-route-btn" value="步行">
               <input type="button" class="query-route-btn query-car-route-btn" value="驾车">
-              <input type="button" class="query-route-btn clear-btn" value="清除">
+              <input type="button" class="clear-btn" value="清除">
             </div>
             <div class="query-result"></div>
           </div>
         </div>
-        <textarea class="input-text"></textarea>
-        <div class="output-content" style="white-space: pre-wrap;"></div>
-        <div class="readfile-content"></div>
       </div>
     </div>
     <script>
